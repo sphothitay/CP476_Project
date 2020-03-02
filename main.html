@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="stylesheet" href="main.css">
+	<title>Unnamed Argument Website</title>
+</head>
+
+<body>
+
+<div id="navbar">
+<ul>
+	<li><a href="profile.html">Profile</a></li>
+	<li><a href="explore.html">Explore</a></li>
+	<li><a href="topics.html">Topics</a></li>
+	<li><a href="index.html">Home</a></li>
+</ul>
+</div>
+
+<div id="recentDialog">
+	<div class="recentPost">
+	<a href="#"><h3>Recent Post 1 Title</h3></a>
+	<p>Some information related to the logged in user/post. These elements (class "recentPost") will be created by javascript/backend.</p>
+	</div>
+	<div class="recentPost">
+	<a href="#"><h3>Recent Post 2 Title</h3></a>
+	<p>This post has multiple sentences of text, and would overflow if not cut off early. This demonstrates a need for a max-height property in the CSS.</p>
+	</div>
+	<div class="recentPost">
+	<a href="#"><h3>Recent Post 3 Title</h3></a>
+	<p>This post has short text; it should have some empty space.</p>
+	</div>
+</div>
+
+<div id="optionsDialog">
+	<a href="#create" class="button">Start an Argument</a>
+	<a href="#random" class="button">Random</a>
+	
+	<div id="chatWindow">
+	<div class="chatMessage sentchat"><p>Hey, how are you?</p></div>
+	<div class="chatMessage recvchat"><p>Good, you?</p></div>
+	<div class="chatMessage recvchat"><p>I've been working a lot lately, so I haven't been on the site much</p></div>
+	<div class="chatMessage sentchat"><p>Yeah me too, do you remember that argument about penguins from before?</p></div>
+	<div class="chatMessage recvchat"><p>What about it?</p></div>
+	<div class="chatMessage sentchat"><p>It's gaining some traction, a lot of people are suddenly voting on it</p></div>
+	<div class="chatMessage recvchat"><p>I guess penguins are the next big thing!</p></div>
+	<textarea id="message" placeholder="say something..."></textarea>
+	<button type="button" class="sendmessage">send</button>
+	</div>
+</div>
+
+<div id="mainContent">
+
+<div class="post">
+	<h3>I am a title</h3>
+	<p>This is a snippet from the start of the post...</p>
+	<div class="postInteractBar">
+	<a href="#likes">17 votes</a><a href="#comments">comments</a>
+	</div>
+</div>
+
+</div>
+
+
+</body>
+
+</html>
