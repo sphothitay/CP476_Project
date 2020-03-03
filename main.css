@@ -1,18 +1,12 @@
 /* Define variables */
-/* TODO: Choose font(s) to use (& make variables) */
 :root {
-/*	Commented for now because I can't coordinate colours
 	--color1: #F8E9A1;
 	--color2: #F76C6C;
 	--color3: #A8D0E6;
 	--color4: #374785;
 	--color5: #24305E;
-*/
-	--color1: #DDD;
-	--color2: #AAA;
-	--color3: #777;
-	--color4: #444;
-	--color5: #111;
+	
+	--font1: "Garamond bold";
 }
 
 
@@ -35,6 +29,7 @@
 body {
 	background-color: var(--color1);
 	color: var(--color5);
+	font-family: var(--font1);
 }
 
 
@@ -108,8 +103,19 @@ body {
 	width: 100%;
 	height: 50%;
 	display: block;
+	overflow: auto;
+}
+
+.messages {
+	height: 30vw;
 	overflow-x: auto;
 	overflow-y: scroll;
+}
+
+.messagehack {
+	width: 100%;
+	display: block;
+	overflow: auto;
 }
 
 .chatMessage {
@@ -117,6 +123,7 @@ body {
 	padding: 2px 4px 2px 4px;
 	margin: 10px 0px 10px 0px;
 	display: block;
+	overflow: auto;
 	max-width: 80%;
 }
 .sentchat{
@@ -146,8 +153,8 @@ a.button {
 	padding: 10px;
 	margin: 8px 8px 8px 8px;
 	text-decoration: none;
-	background-color: var(--color5);
 	color: var(--color1);
+	background-color: var(--color5);
 	font-size: 14pt;
 }
 
@@ -161,11 +168,14 @@ a.button:hover {
 	border-radius: 8px;
 	background-color: var(--color2);
 	padding: 1px 2px 2px 2px;
+	margin: 0px 2px 8px 2px;
 	overflow: auto;
 }
 
 .postInteractBar > * {
 	float: left;
+	display: inline;
+	margin: 0 auto;
 }
 
 

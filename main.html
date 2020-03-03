@@ -37,15 +37,19 @@
 	<a href="#random" class="button">Random</a>
 	
 	<div id="chatWindow">
-	<div class="chatMessage sentchat"><p>Hey, how are you?</p></div>
-	<div class="chatMessage recvchat"><p>Good, you?</p></div>
-	<div class="chatMessage recvchat"><p>I've been working a lot lately, so I haven't been on the site much</p></div>
-	<div class="chatMessage sentchat"><p>Yeah me too, do you remember that argument about penguins from before?</p></div>
-	<div class="chatMessage recvchat"><p>What about it?</p></div>
-	<div class="chatMessage sentchat"><p>It's gaining some traction, a lot of people are suddenly voting on it</p></div>
-	<div class="chatMessage recvchat"><p>I guess penguins are the next big thing!</p></div>
-	<textarea id="message" placeholder="say something..."></textarea>
-	<button type="button" class="sendmessage">send</button>
+		<div class="messages">
+			<div class="messagehack"><div class="chatMessage sentchat"><p>Hey, how are you?</p></div></div>
+			<div class="messagehack"><div class="chatMessage recvchat"><p>Good, you?</p></div></div>
+			<div class="messagehack"><div class="chatMessage recvchat"><p>I've been working a lot lately, so I haven't been on the site much</p></div></div>
+			<div class="messagehack"><div class="chatMessage sentchat"><p>Yeah me too, do you remember that argument about penguins from before?</p></div></div>
+			<div class="messagehack"><div class="chatMessage recvchat"><p>What about it?</p></div></div>
+			<div class="messagehack"><div class="chatMessage sentchat"><p>It's gaining some traction, a lot of people are suddenly voting on it</p></div></div>
+			<div class="messagehack"><div class="chatMessage recvchat"><p>I guess penguins are the next big thing!</p></div></div>
+		</div>
+		<form action="#sendmessage" method="post">
+			<textarea name="message" class="w80" placeholder="say something..."></textarea>
+			<input type="submit" id="sendmessage" class="w30" value="send" />
+		</form>
 	</div>
 </div>
 
@@ -55,7 +59,15 @@
 	<h3>I am a title</h3>
 	<p>This is a snippet from the start of the post...</p>
 	<div class="postInteractBar">
-	<a href="#likes">17 votes</a><a href="#comments">comments</a>
+	<p>17 votes <a href="#comments">12 comments</a></p>
+	</div>
+</div>
+
+<div class="post">
+	<h3>This is another post</h3>
+	<p>Argue argue argue... bicker bicker bicker...</p>
+	<div class="postInteractBar">
+	<p>-3 votes <a href="#comments">2 comments</a></p>
 	</div>
 </div>
 
