@@ -9,14 +9,7 @@
 
 <body>
 
-    <div id="navbar">
-        <ul>
-            <li><a href="#">Logout</a></li>
-            <li><a href="debate.html">Debate</a></li>
-            <li><a href="topics.html">Topics</a></li>
-            <li><a href="index.html">Home</a></li>
-        </ul>
-    </div>
+{% include 'navbar.html' %}
 
     <h1>Browse Topics</h1>
 
@@ -25,7 +18,7 @@
     </div>
 
     <div id = "addTopicButton">
-        <button><a href="createTopic.html">Add Topic</a></button>
+        <button><a href="createTopic">Add Topic</a></button>
     </div>
     
     <div id = "topicList">
