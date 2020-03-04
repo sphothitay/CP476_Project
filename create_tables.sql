@@ -1,3 +1,12 @@
+CREATE TABLE IF NOT EXISTS Topics (
+	TopicName varchar(255) UNIQUE NOT NULL, /* Short, descriptive name for the topic */
+	TopicDescription text NOT NULL, /* In depth description of the topic */
+
+	TopicID int NOT NULL AUTO_INCREMENT,
+	PRIMARY KEY(TopicIC)
+)
+;
+
 CREATE TABLE IF NOT EXISTS Users (
 	Username varchar(255) UNIQUE NOT NULL,
 	Password varchar(255) NOT NULL, /* This will be hashed/salted */
@@ -14,8 +23,10 @@ CREATE TABLE IF NOT EXISTS Arguments (
 
 	ArgumentID int NOT NULL AUTO_INCREMENT,
 	UserID int NOT NULL,
+	TopicID int NOT NULL,
 	PRIMARY KEY(ArgumentID),
-	FOREIGN KEY(UserID) REFERENCES Users(UserID) ON DELETE CASCADE
+	FOREIGN KEY(UserID) REFERENCES Users(UserID) ON DELETE CASCADE,
+	FOREIGN KEY(TopicID) REFERENCES Topics(TopicID) ON DELETE CASCADE
 )
 ;
 
