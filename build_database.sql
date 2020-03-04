@@ -1,3 +1,7 @@
+/* Make sure the database exists / we are using the right database */
+CREATE DATABASE IF NOT EXISTS DebateDB;
+USE DebateDB;
+
 CREATE TABLE IF NOT EXISTS Topics (
 	TopicName varchar(255) UNIQUE NOT NULL, /* Short, descriptive name for the topic */
 	TopicDescription text NOT NULL, /* In depth description of the topic */
