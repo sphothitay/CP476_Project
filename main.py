@@ -1,3 +1,4 @@
+import sql_queries as queries
 from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
@@ -27,3 +28,10 @@ def topics():
 @app.route('/createTopic')
 def createTopic():
 	return render_template( 'createTopic.html' )
+
+@app.route('/post/<int:post_id>')
+def getPost( post_id ):
+	argument = queries.GetArgument( queries.GetDB(), post_id )
+	# TODO: edit debate template, render template with debate contents
+	return render_template( 'debate.html' )
+

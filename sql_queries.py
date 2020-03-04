@@ -1,11 +1,13 @@
 import mysql.connector
 
+databaseConnection = None
+
 def GetDB():
-	return mysql.connector.connect(
-		host="localhost",
-		user="root",
-		passwd="",
-		database="")
+	global databaseConnection
+	if databaseConnection is None:
+		databaseConnection = mysql.connector.connect(
+			host="localhost", user="root", passwd="", database="DebateDB")
+	return databaseConnection
 
 def GetArgument( db, argumentID ):
 	queryString = '''SELECT * FROM Arguments AS A
