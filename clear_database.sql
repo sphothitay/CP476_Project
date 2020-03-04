@@ -1,3 +1,5 @@
+USE DebateDB;
+
 DELETE FROM Users;
 DELETE FROM Topics;
 /* The above should cascade to all other tables, 

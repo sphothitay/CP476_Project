@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS Topics (
 	TopicDescription text NOT NULL, /* In depth description of the topic */
 
 	TopicID int NOT NULL AUTO_INCREMENT,
-	PRIMARY KEY(TopicIC)
+	PRIMARY KEY(TopicID)
 )
 ;
 
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS Comments (
 	ArgumentID int NOT NULL,
 	UserID int NOT NULL,
 	PRIMARY KEY(CommentID),
-	FOREIGN KEY(ArgumentID) REFERENCES Posts(ArgumentID)
+	FOREIGN KEY(ArgumentID) REFERENCES Arguments(ArgumentID)
 		ON DELETE CASCADE,
 	FOREIGN KEY(UserID) REFERENCES Users(UserID)
 		ON DELETE CASCADE
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS Votes (
 	PRIMARY KEY(UserID, ArgumentID),
 	FOREIGN KEY(UserID) REFERENCES Users(UserID)
 		ON DELETE CASCADE,
-	FOREIGN KEY(ArgumentID) REFERENCES Posts(ArgumentID)
+	FOREIGN KEY(ArgumentID) REFERENCES Arguments(ArgumentID)
 		ON DELETE CASCADE
 )
 ;
@@ -84,8 +84,11 @@ CREATE TABLE IF NOT EXISTS Notifications (
 	PRIMARY KEY(NotificationID),
 	FOREIGN KEY(UserID) REFERENCES Users(UserID)
 		ON DELETE CASCADE,
-	FOREIGN KEY(ArgumentID) REFERENCES Posts(ArgumentID)
+	FOREIGN KEY(ArgumentID) REFERENCES Arguments(ArgumentID)
 		ON DELETE CASCADE
 )
 ;
 
+/* TODO: Add some triggers
+ * Comments: make sure parent comment is in same thread as child comment
+*/
