@@ -35,3 +35,30 @@ li {
 .card:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
+
+#addTopicButton {
+    margin-top: 50px;
+}
+
+form {
+    text-align: center;
+}
+
+form input {
+    margin-bottom: 20px;
+}
+
+#topicNameInput {
+    width: 375px;
+}
+
+#topicDescArea {
+    margin-top: 10px;
+    width: 500px;
+    height: 150px;
+    margin-bottom: 10px;
+}
+
+#addButton {
+    text-align: center;
+}
