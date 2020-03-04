@@ -31,7 +31,7 @@ def createTopic():
 
 @app.route('/post/<int:post_id>')
 def getPost( post_id ):
-	argument = queries.GetArgument( queries.GetDB(), post_id )
+	argument = queries.GetArgument( post_id )
 	# TODO: edit debate template, render template with debate contents
 	return render_template( 'debate.html' )
 
