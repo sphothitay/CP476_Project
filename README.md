@@ -25,13 +25,13 @@ flask run
 
 Things we need to do to finish the site
 
-+ Hash passwords (make logging in/registering possible)
++ ~~Hash passwords (make logging in/registering possible)~~
 + Deal with sessions (so user can stay logged in across pages)
 + Remove prototype data from templates, add variables that can be filled by `Flask.render_template()`
 + Make pages actually functional (`create post` creates a new post in the DB, same with create topic, etc)
 + Figure out how to implement live chat
 + Decide on how to do user matchmaking for arguments
-+ Finalize SQL database design
++ Add new tables/columns where necessary
 + Add database triggers if applicable
 + Decide on how to "archive" past arguments
 
