@@ -1,4 +1,17 @@
 import mysql.connector
+import bcrypt
+
+def CreateUser( username, password ):
+	queryString = 'INSERT INTO Users (username, password) VALUES (%s, %s)'
+	hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+	try:
+		cursor = GetDB().cursor()
+		cursor.execute( queryString, (username, hashed) )
+		cursor.close()
+		return True
+	except mysql.connector.Error:
+		return False
 
 
 def GetArgument( argumentID ):
@@ -66,6 +79,8 @@ def runQuery( queryString, params ):
 	cursor = db.cursor()
 	cursor.execute( queryString, params )
 	result = cursor.fetchall()
+	columns = cursor.column_names
 	cursor.close()
-	return result
+	
+	return tuple({ columns[i]:entry[i] for i in range(len(columns)) } for entry in result)
 
