@@ -12,6 +12,7 @@ To launch the debate website on your local machine, start by installing the pyth
 ```
 python3 -m pip install flask
 python3 -m pip install mysql-connector
+python3 -m pip install bcrypt
 ```
 
 Then do the following in a command prompt:
