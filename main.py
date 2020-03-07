@@ -56,9 +56,11 @@ def register():
 	if password != password_repeat:
 		return redirect(url_for('index', err='password_match'))
 
-	queries.CreateUser(username, password)
+	if queries.CreateUser(username, password):
+		session['username'] = username
+		return redirect(url_for('index'))
+	return redirect(url_for('index', err='create_failed'))
 
-	return redirect(url_for('index'))
 
 @app.route('/debate')
 def debate():

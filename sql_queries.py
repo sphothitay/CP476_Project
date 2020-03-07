@@ -72,6 +72,7 @@ def GetDB():
 	if databaseConnection is None:
 		databaseConnection = mysql.connector.connect(
 			host="localhost", user="root", passwd="", database="DebateDB")
+		databaseConnection.autocommit = True
 	return databaseConnection
 
 def runQuery( queryString, params ):
