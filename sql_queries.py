@@ -1,5 +1,6 @@
 import mysql.connector
 import bcrypt
+import os
 
 def CreateUser( username, password ):
 	queryString = 'INSERT INTO Users (username, password) VALUES (%s, %s)'
@@ -71,7 +72,9 @@ def GetDB():
 	global databaseConnection
 	if databaseConnection is None:
 		databaseConnection = mysql.connector.connect(
-			host="localhost", user="root", passwd="", database="DebateDB")
+			host="localhost", user="root",
+			passwd=os.environ['MYSQL_PASSWORD'],
+			database="DebateDB")
 		databaseConnection.autocommit = True
 	return databaseConnection
 
