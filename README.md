@@ -7,20 +7,15 @@
 Note: this guide assumes you are using a Windows machine, and have Python 3.0 or higher installed.  
 See [here](https://flask.palletsprojects.com/en/1.1.x/cli/) for info on other platforms.
 
-To launch the debate website on your local machine, start by installing the python dependencies:
+The site is easy to launch using Docker for Windows!
 
-```
-python3 -m pip install flask
-python3 -m pip install mysql-connector
-python3 -m pip install bcrypt
-```
+If you don't have docker installed, install it [here](https://hub.docker.com/editions/community/docker-ce-desktop-windows).
 
-Then do the following in a command prompt:
+To launch the site, run `deploy.ps1` in Windows Powershell.
+The script will take a few minutes to install dependencies, but once finished the site will be available at http://localhost:80/home
 
-```
-set FLASK_APP=main.py
-flask run
-```
+**TODO:** convert deploy.ps1 to a `docker-compose.yml` for cross-platform support.
+
 
 ### TODO List
 
