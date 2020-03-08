@@ -1,0 +1,7 @@
+version: "3.7"
+services:
+  cp476-app:
+    build:
+      context: '.'
+    ports:
+      - "0.0.0.0:80:5000"
