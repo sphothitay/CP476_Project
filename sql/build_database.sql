@@ -1,8 +1,9 @@
-/* Make sure the database exists / we are using the right database */
-CREATE DATABASE IF NOT EXISTS DebateDB;
+/* Drop old database if it exists, then create new copy to use */
+DROP DATABASE IF EXISTS DebateDB;
+CREATE DATABASE DebateDB;
 USE DebateDB;
 
-CREATE TABLE IF NOT EXISTS Topics (
+CREATE TABLE Topics (
 	TopicName varchar(255) UNIQUE NOT NULL, /* Short, descriptive name for the topic */
 	TopicDescription text NOT NULL, /* In depth description of the topic */
 
@@ -11,7 +12,7 @@ CREATE TABLE IF NOT EXISTS Topics (
 )
 ;
 
-CREATE TABLE IF NOT EXISTS Users (
+CREATE TABLE Users (
 	Username varchar(255) UNIQUE NOT NULL,
 	Password varchar(255) NOT NULL, /* This will be hashed/salted */
 
@@ -20,7 +21,7 @@ CREATE TABLE IF NOT EXISTS Users (
 )
 ;
 
-CREATE TABLE IF NOT EXISTS Arguments (
+CREATE TABLE Arguments (
 	ArgumentTitle varchar(512), /* Limit number of characters in title to save space */
 	ArgumentContent text,
 	Created timestamp DEFAULT CURRENT_TIMESTAMP,
@@ -34,7 +35,7 @@ CREATE TABLE IF NOT EXISTS Arguments (
 )
 ;
 
-CREATE TABLE IF NOT EXISTS Comments (
+CREATE TABLE Comments (
 	Content text NOT NULL,
 	ParentComment int DEFAULT NULL,
 
@@ -49,7 +50,7 @@ CREATE TABLE IF NOT EXISTS Comments (
 )
 ;
 
-CREATE TABLE IF NOT EXISTS CommentVotes (
+CREATE TABLE CommentVotes (
 	IsUpvote boolean NOT NULL, /* Comment gets +1 points if true, else -1 */
 
 	UserID int NOT NULL,
@@ -75,7 +76,7 @@ CREATE TABLE IF NOT EXISTS Votes (
 )
 ;
 
-CREATE TABLE IF NOT EXISTS Notifications (
+CREATE TABLE Notifications (
 	Message text NOT NULL, /* Actual message the notification is sending */
 
 	NotificationID int NOT NULL AUTO_INCREMENT,
