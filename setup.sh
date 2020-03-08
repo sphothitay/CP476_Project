@@ -2,7 +2,9 @@
 
 cd app
 
-echo "Setting MySQL root user password"
+echo "Setting up mysql service"
+export MYSQL_PASSWORD=$(cat /dev/urandom | tr -cd a-zA-Z0-9 | head -c 32)
+
 service mysql start
 echo "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${MYSQL_PASSWORD}';" > reset_pass.sql
 mysql -u root < reset_pass.sql
