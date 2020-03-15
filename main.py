@@ -65,7 +65,16 @@ def register():
 
 @app.route('/debate')
 def debate():
-	return render_template('debate.html')
+	topic = 'penguins'
+	messages = [ 
+		{ 'message':'Hello World!', 'sent': False}, 
+		{ 'message':'Hello to you too!', 'sent': True}
+	]
+	related = [
+		{'href': '#test-1', 'title': 'Some other thing'},
+		{'href': '#test-2', 'title': 'A related posty post'}
+	]
+	return render_template('debate.html', topic=topic, messages=messages, related=related )
 
 @app.route('/topics')
 def topics():
