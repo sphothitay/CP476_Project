@@ -15,6 +15,9 @@ app.config['SESSION_TYPE'] = 'filesystem' # TODO: Change this
 def index():
 	if 'username' in session and session['username'] is not None:
 		return render_template('index.html')
+	errcode = request.args.get('err')
+	if errcode is not None:
+		return handle_login_error(errcode)
 	return render_template('login.html')
 
 @app.route('/logout', methods=['POST'])
@@ -112,7 +115,7 @@ def handle_login_error(errcode):
 		errmsg = 'Incorrect username or password'
 	if errcode == 'missing_fields':
 		errmsg = 'All fields must be filled to continue'
-	return render_template('login.html', errmsg=errmsg)
+	return render_template('login.html', error=errmsg)
 
 @app.errorhandler(404)
 def page_not_found(e):

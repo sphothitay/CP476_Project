@@ -2,16 +2,15 @@ h1 {
     text-align: center;
 }
 
-#topicSearchBar {
-    width: 100%;
-    text-align: center;
-}
-
 li {
     list-style-type: none;
     text-align: center;
     vertical-align: middle;
     font-weight: bold;
+}
+
+#topicSearch {
+	text-align: center;
 }
 
 #topicList {
@@ -34,11 +33,6 @@ li {
 
 .card:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-}
-
-#addTopicButton {
-    margin-top: 50px;
-    text-align: center;
 }
 
 form {

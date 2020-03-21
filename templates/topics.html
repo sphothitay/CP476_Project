@@ -13,13 +13,14 @@
 
     <h1>Browse Topics</h1>
 
-    <div id = "topicSearch">
-        <input type="text", id="topicSearchBar" placeholder="Search..">
-    </div>
+    <div id="topicSearch">
+		<form name="topicSearchForm" action="topics" method="GET">
+		<input class="w40" type="text" name="search" placeholder="Search..">
+		<button class="w10" type="submit">Go</button>
+		</form>
+	</div>
 
-    <div id = "addTopicButton">
-        <a class="w10 button" href="createTopic">Add Topic</a>
-    </div>
+	<a class="w10 button" href="createTopic">Add Topic</a>
     
     <div id="topicList">
         <ul>

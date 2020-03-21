@@ -211,3 +211,21 @@ a.button:hover {
 #loginregister input[type=submit] {
 	width: 25%;
 }
+
+.errorbox {
+	position: absolute;
+	top: 90%;
+	left: 10%;
+    width: 80%;
+	text-align: center;
+	border: 1px solid #666;
+	color: #D02;
+    background-color: #FFD2D2;
+}
+
+.errorbox .close {
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	text-decoration: none;
+}

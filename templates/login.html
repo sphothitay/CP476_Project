@@ -4,6 +4,12 @@
 <head>
 	<link rel="stylesheet" href="/static/main.css">
 	<title>Unnamed Argument Website</title>
+	<script type="text/javascript">
+	function hideElement( id ) {
+		elem = document.getElementById( id );
+		if( elem ) elem.style.display = "none";
+	}
+	</script>
 </head>
 
 <body>
@@ -35,6 +41,15 @@
 	</div>
 
 </div>
+
+{% if error is defined %}
+
+<div class="errorbox" id="loginerror">
+	<p>{{ error }}</p>
+	<a class="close" href="javascript:void(0)" onclick="hideElement('loginerror')">x</a>
+</div>
+
+{% endif %}
 
 </body>
 </html>
