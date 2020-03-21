@@ -3,7 +3,9 @@ import bcrypt
 import os
 
 def CreateUser( username, password ):
-	queryString = 'INSERT INTO Users (username, password) VALUES (%s, %s)'
+	queryString = '''INSERT INTO 
+Users (Username, Password) 
+VALUES (%s, %s)'''
 	hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
 	try:
@@ -14,6 +16,18 @@ def CreateUser( username, password ):
 	except mysql.connector.Error:
 		return False
 
+def CreateTopic(name, description):
+	queryString = '''INSERT INTO 
+Topics (TopicName, TopicDescription) 
+VALUES (%s, %s)'''
+
+	try:
+		cursor = GetDB().cursor()
+		cursor.execute( queryString, (name, description) )
+		cursor.close()
+		return True
+	except mysql.connector.Error:
+		return False
 
 def GetArgument( argumentID ):
 	queryString = '''SELECT * FROM Arguments AS A
@@ -25,22 +39,26 @@ WHERE ArgumentID=%s'''
 		return None
 	return result[0]
 
+def GetTopics():
+	queryString = '''SELECT * FROM Topics'''
+	return runQuery( queryString )
+
 def GetComment( commentID ):
-	queryString = 'SELECT * FROM Comments WHERE CommentID=%s'
+	queryString = '''SELECT * FROM Comments WHERE CommentID=%s'''
 	result = runQuery( queryString, (commentID, ) )
 	if len(result) == 0:
 		return None
 	return result[0]
 
 def GetUser( userID ):
-	queryString = 'SELECT * FROM Users WHERE UserID=%s'
+	queryString = '''SELECT * FROM Users WHERE UserID=%s'''
 	result = runQuery( queryString, (userID, ) )
 	if len(result) == 0:
 		return None
 	return result[0]
 
 def GetUserByUsername( username ):
-	queryString = 'SELECT * FROM Users WHERE Username=%s'
+	queryString = '''SELECT * FROM Users WHERE Username=%s'''
 	result = runQuery( queryString, (username, ) )
 	if len(result) == 0:
 		return None

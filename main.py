@@ -62,7 +62,6 @@ def register():
 		return redirect(url_for('index'))
 	return redirect(url_for('index', err='create_failed'))
 
-
 @app.route('/debate')
 def debate():
 	topic = 'penguins'
@@ -76,13 +75,22 @@ def debate():
 	]
 	return render_template('debate.html', topic=topic, messages=messages, related=related )
 
+# TODO: Use TopicDescription & TopicID in topics.html template
 @app.route('/topics')
 def topics():
-	return render_template('topics.html')
+	topics = queries.GetTopics()
+	return render_template('topics.html', topics=topics)
 
-@app.route('/createTopic')
+@app.route('/createTopic', methods=["GET", "POST"])
 def createTopic():
-	return render_template('createTopic.html')
+	if request.method == "POST":
+		if 'name' in request.post and 'description' in request.post:
+			name = request.post['name']
+			description = request.post['description']
+			queries.CreateTopic( name, description )
+		return redirect( url_for('topics') )
+	else:
+		return render_template('createTopic.html')
 
 @app.route('/post/<int:post_id>')
 def getPost(post_id):

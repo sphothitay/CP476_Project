@@ -12,14 +12,15 @@
 
         <h1>Add Topic</h1>
 
-        <form action="">
+        <form action="createTopic" method="POST" name="newtopic">
             <label for="topicNameLabel">Enter Topic Name:</label>
-            <input type="text" id = "topicNameInput"><br>
+            <input type="text" id="topicNameInput" name="name"><br>
             <label id="topicDescLabel" for="topicDescLabel">Enter Topic Description:</label><br>
-            <textarea id="topicDescArea"></textarea>
+            <textarea id="topicDescArea" name="description"></textarea>
             <div id="addButton">
-                <button id="addButton"><a href="topics">Add</a></button>
-            </div>
+				<a class="button" href="javascript:void(0)" 
+				onclick="document.newtopic.submit()">Add</a>
+           </div>
         </form>
     </body>
 

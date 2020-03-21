@@ -18,26 +18,16 @@
     </div>
 
     <div id = "addTopicButton">
-        <button><a href="createTopic">Add Topic</a></button>
+        <a class="button" href="createTopic">Add Topic</a>
     </div>
     
-    <div id = "topicList">
+    <div id="topicList">
         <ul>
+			{% for topic in topics %}
             <div class="card">
-                <li>Politics</li>
+                <li>{{ topic.TopicName }}</li>
             </div>
-            <div class="card">
-                <li>Health</li>
-            </div>
-            <div class="card">
-                <li>Education</li>
-            </div>    
-            <div class="card">
-                <li>Social</li>
-            </div>    
-            <div class="card">
-                <li>Technology</li>
-            </div>
+			{% endfor %}
         </ul>
     </div>
 
