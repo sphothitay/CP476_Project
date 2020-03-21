@@ -84,9 +84,9 @@ def topics():
 @app.route('/createTopic', methods=["GET", "POST"])
 def createTopic():
 	if request.method == "POST":
-		if 'name' in request.post and 'description' in request.post:
-			name = request.post['name']
-			description = request.post['description']
+		if 'name' in request.form and 'description' in request.form:
+			name = request.form['name']
+			description = request.form['description']
 			queries.CreateTopic( name, description )
 		return redirect( url_for('topics') )
 	else:

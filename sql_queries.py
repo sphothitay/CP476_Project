@@ -41,7 +41,7 @@ WHERE ArgumentID=%s'''
 
 def GetTopics():
 	queryString = '''SELECT * FROM Topics'''
-	return runQuery( queryString )
+	return runQuery( queryString, tuple() )
 
 def GetComment( commentID ):
 	queryString = '''SELECT * FROM Comments WHERE CommentID=%s'''
