@@ -13,7 +13,8 @@ RUN apt-get install -y python3.6 python3-pip mysql-server
 RUN pip3 install flask mysql-connector bcrypt
 
 # Copy and start the app
-COPY . /app
-RUN sed -i.bak 's/\r$//' "./app/setup.sh"
-RUN chmod +x "./app/setup.sh"
-ENTRYPOINT ["./app/setup.sh"]
+WORKDIR /app
+COPY . .
+RUN sed -i.bak 's/\r$//' "./setup.sh"
+RUN chmod +x "./setup.sh"
+ENTRYPOINT ["./setup.sh"]

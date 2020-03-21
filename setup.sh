@@ -1,7 +1,5 @@
 #!/bin/bash
 
-cd app
-
 echo "Setting up mysql service"
 export MYSQL_PASSWORD=$(cat /dev/urandom | tr -cd a-zA-Z0-9 | head -c 32)
 
