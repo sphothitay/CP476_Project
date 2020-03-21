@@ -31,7 +31,8 @@ Things we need to do to finish the site
   + Store archives as read-only files
   + Store archives in their own table
   + Keep archives in regular table, but add boolean column `archived`
-
++ Add messages for info/error
+  + non-intrusive window above content at bottom of page with 'x' to close
 
 If all of the above goes well, we can start to work on some stretch goals
 
