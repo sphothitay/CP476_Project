@@ -10,7 +10,7 @@ app.secret_key = urandom(32)
 app.config['SESSION_TYPE'] = 'filesystem' # TODO: Change this
 
 def user_logged_in():
-    cookie = request.cookies.get('userinfo')
+	 cookie = request.cookies.get('userinfo')
 	return cookie == session['username']
 
 @app.route('/')
