@@ -9,11 +9,15 @@ app = Flask(__name__)
 app.secret_key = urandom(32)
 app.config['SESSION_TYPE'] = 'filesystem' # TODO: Change this
 
+def user_logged_in():
+    cookie = request.cookies.get('userinfo')
+	return cookie == session['username']
+
 @app.route('/')
 @app.route('/index')
 @app.route('/home')
 def index():
-	if 'username' in session and session['username'] is not None:
+	if not user_logged_in():
 		return render_template('index.html')
 	errcode = request.args.get('err')
 	if errcode is not None:
@@ -22,9 +26,11 @@ def index():
 
 @app.route('/logout', methods=['POST'])
 def logout():
+	res = make_response(redirect(url_for('index')))
+	res.set_cookie('arguserinfo', '', max_age=0)
 	if 'username' in session:
 		del session['username']
-	return redirect(url_for('index'))
+	return res
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -38,8 +44,10 @@ def login():
 		return redirect(url_for('index', err='not_found'))
 	
 	if check_password(password.encode('utf-8'), user['Password'].encode('utf-8')):
+		res = make_response(redirect(request.referrer or url_for('')))
+		res.set_cookie("arguserinfo", session['username'], max_age=60*60*24*7)
 		session['username'] = user['Username']
-		return redirect(request.referrer or url_for(''))
+		return res
 	
 	return redirect(url_for('index', err='invalid_login'))
 
@@ -67,8 +75,10 @@ def register():
 
 @app.route('/debate')
 def debate():
+	if not user_logged_in():
+		return redirect(url_for('index'))
 	topic = 'penguins'
-	messages = [ 
+	messages = [
 		{ 'message':'Hello World!', 'sent': False}, 
 		{ 'message':'Hello to you too!', 'sent': True}
 	]
@@ -95,6 +105,12 @@ def createTopic():
 	else:
 		return render_template('createTopic.html')
 
+@app.route('/post/<int:post_id>/send', methods=['POST'])
+def send_message(post_id):
+	argument = queries.GetArgument(post_id)
+	res = make_response('')
+	return res
+
 @app.route('/post/<int:post_id>')
 def getPost(post_id):
 	argument = queries.GetArgument(post_id)
@@ -119,4 +135,4 @@ def handle_login_error(errcode):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return app.send_static_file('404.html'), 404
+	return app.send_static_file('404.html'), 404
