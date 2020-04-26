@@ -39,6 +39,7 @@ Things we need to do to finish the site
 + Add messages for info/error
   + non-intrusive window above content at bottom of page with 'x' to close
 
+### Stretch Goals
 If all of the above goes well, we can start to work on some stretch goals
 
 + Simple markdown in posts and comments (embedded links, bold text)
@@ -66,8 +67,10 @@ If all of the above goes well, we can start to work on some stretch goals
   + At the very least have a "Are you sure you want to leave?" prompt
 
 
-Disclaimer: This application is a school project, and proper security measures have not been taken. To make this app secure, we would have to:
+## Security Disclaimer
+
+This application is a school project, and proper security measures have not been taken. To make this app secure, we would have to:
 
 + Use secure sessions, [Flask sessions are unsafe](https://blog.miguelgrinberg.com/post/how-secure-is-the-flask-user-session)\
 + Serve the app over HTTPS instead of HTTP
-+ Deploy the app with a (proper server](https://flask.palletsprojects.com/en/1.1.x/deploying/#deployment), such as IIS or WSGI
++ Deploy the app with a [proper server](https://flask.palletsprojects.com/en/1.1.x/deploying/#deployment), such as IIS or WSGI
