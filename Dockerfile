@@ -10,7 +10,7 @@ RUN echo "tango-common tango-common/tango-host string ${TANGOSERVER}:20000" | de
 # Install dependencies
 RUN apt-get update
 RUN apt-get install -y python3.6 python3-pip mysql-server
-RUN pip3 install flask mysql-connector bcrypt
+RUN pip3 install flask mysql-connector-python bcrypt
 
 # Copy and start the app
 WORKDIR /app
