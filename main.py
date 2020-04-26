@@ -10,8 +10,9 @@ app.secret_key = urandom(32)
 app.config['SESSION_TYPE'] = 'filesystem' # TODO: Change this
 
 def user_logged_in():
-	cookie = request.cookies.get('userinfo')
-	return cookie == session['username']
+	if 'username' not in session or 'userinfo' not in request.cookies:
+		return False
+	return request.cookies['userinfo'] == session['username']
 
 @app.route('/')
 @app.route('/index')
