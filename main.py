@@ -106,9 +106,13 @@ def createTopic():
 	else:
 		return render_template('createTopic.html')
 
-@app.route('/opinion')
+@app.route('/opinion', methods=['GET', 'POST'])
 def opinion():
-	return render_template('opinion.html')
+	if request.method == "POST":
+		selected_topic = request.args.get('topic')
+		return render_template('opinion.html', title='Select an Opinion', topic=selected_topic)
+	else:
+		return redirect(url_for('opinion'))
 
 @app.route('/post/<int:post_id>/send', methods=['POST'])
 def send_message(post_id):

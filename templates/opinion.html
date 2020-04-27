@@ -14,14 +14,12 @@
     <h1>Create your opinion</h1>
 
     <div id="opinionCreation">
-        <p>Please enter your opinion or stance on the topic to queue up for an argument:</p>
+        <p>Please enter your opinion or stance on the topic to create an argument:</p>
 		<form action="createOpinion" method="POST" name="newOpinion">
-            <input class="w40" type="text" name="opinion" placeholder="I believe that so and so should be this and that.">
-            <button class="w10" type="submit">Submit opinion</button>
-            <textarea id="opinionDescArea" name="opinion"></textarea>
+            <textarea id="opinionDescArea" name="opinion" placeholder="I believe that so and so should be this and that."></textarea>
             <div id="opinionSubmitButton">
                 <a class="w10 button" href="javascript:void(0)" 
-                onclick="document.newOpinion.submit()">Add</a>
+                onclick="document.newOpinion.submit()">Create Opinion</a>
             </div>
 		</form>
 	</div>
