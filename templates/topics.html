@@ -26,9 +26,7 @@
         <ul>
             {% for topic in topics %}
             <div class="card">
-                <form action="opinion" method="POST" name="selectTopic"></form>
-                    <li>{{ topic.TopicName }}</li>
-                </form>
+                    <li><a href="{{ url_for('opinion', topic=topic.TopicName)}}">{{ topic.TopicName }}</a></li>
             </div>
             {% endfor %}
         </ul>
