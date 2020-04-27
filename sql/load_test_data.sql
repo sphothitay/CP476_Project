@@ -20,14 +20,23 @@ VALUES ('Fake Topic', 'Fake Description');
 INSERT INTO Topics (TopicName, TopicDescription)
 VALUES ('Blank Topic', '');
 
+INSERT INTO Arguments (ArgumentTitle, ArgumentContent, User1ID, User2ID, TopicID)
+VALUES ('Argument 1', 'This is the argument body; need to figure out how to format this', 1, 2, 1);
+INSERT INTO Arguments (ArgumentTitle, ArgumentContent, User1ID, User2ID, TopicID)
+VALUES ('Argument 2', '', 2, 3, 2);
+INSERT INTO Arguments (ArgumentTitle, ArgumentContent, User1ID, User2ID, TopicID)
+VALUES ('Another Argument', 'This is the first argument with the name "Another Argument"', 3, 1, 4);
+INSERT INTO Arguments (ArgumentTitle, ArgumentContent, User1ID, User2ID, TopicID)
+VALUES ('Another Argument', 'This just shows that multiple arguments can have the same name', 3, 4, 2);
+
+INSERT INTO Messages (MessageContent, ArgumentID, UserID)
+VALUES ('opinion', 1, 1);
 INSERT INTO Arguments (ArgumentTitle, ArgumentContent, UserID, TopicID)
-VALUES ('Argument 1', 'This is the argument body; need to figure out how to format this', 1, 1);
+VALUES ('FACTS', 1, 2);
 INSERT INTO Arguments (ArgumentTitle, ArgumentContent, UserID, TopicID)
-VALUES ('Argument 2', '', 2, 2);
+VALUES ('good point', 1, 1);
 INSERT INTO Arguments (ArgumentTitle, ArgumentContent, UserID, TopicID)
-VALUES ('Another Argument', 'This is the first argument with the name "Another Argument"', 3, 4);
-INSERT INTO Arguments (ArgumentTitle, ArgumentContent, UserID, TopicID)
-VALUES ('Another Argument', 'This just shows that multiple arguments can have the same name', 3, 2);
+VALUES ('case closed',1, 2);
 
 INSERT INTO Comments (Content, ArgumentID, UserID)
 VALUES ('Hello World :)', 1, 1);
