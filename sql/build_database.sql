@@ -28,7 +28,7 @@ CREATE TABLE Arguments (
 
 	ArgumentID int NOT NULL AUTO_INCREMENT,
 	User1ID int NOT NULL,
-	User2ID int NOT NULL,
+	User2ID int,
 	TopicID int NOT NULL,
 	PRIMARY KEY(ArgumentID),
 	FOREIGN KEY(User1ID) REFERENCES Users(UserID) ON DELETE CASCADE,
