@@ -36,6 +36,41 @@ VALUES (%s, %s, %d, %d, %d)'''
 
 	try:
 		cursor = GetDB().cursor()
+		cursor.execute( queryString, (Title, Content, TopicID, User1ID, User2ID) )
+		return True
+	except mysql.connector.Error:
+		return False
+
+def CreateOpinion(Title, Content, TopicID, User1ID):
+	queryString = '''INSERT INTO 
+Arguments (ArgumentTitle, ArgumentContent, TopicID, User1ID, User2ID) 
+VALUES (%s, %s, %d, %d)'''
+
+	try:
+		cursor = GetDB().cursor()
+		cursor.execute( queryString, (Title, Content, TopicID, User1ID) )
+		cursor.close()
+		return True
+	except mysql.connector.Error:
+		return False
+
+def OpinionToArgument(user2ID, ArgumentID):
+	
+	queryString = '''UPDATE Arguments
+SET user2ID = %d
+WHERE ArgumentID = %d'''
+	result = runQuery( queryString, (user2ID, ArgumentID) )
+	if len(result) == 0:
+		return None
+	return result[0]
+
+
+	queryString = '''INSERT INTO 
+Arguments (ArgumentTitle, ArgumentContent, TopicID, User1ID, User2ID) 
+VALUES (%s, %s, %d, %d)'''
+
+	try:
+		cursor = GetDB().cursor()
 		cursor.execute( queryString, (name, description) )
 		cursor.close()
 		return True
