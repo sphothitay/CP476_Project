@@ -49,7 +49,7 @@ def login():
 		res = make_response(redirect(request.referrer or url_for('')))
 		res.set_cookie("arguserinfo", session['username'], max_age=60*60*24*7)
 		session['username'] = user['Username']
-        session['userid'] = user['UserID']
+		session['userid'] = user['UserID']
 		return res
 	
 	return redirect(url_for('index', err='invalid_login'))
@@ -73,7 +73,7 @@ def register():
 
 	if queries.CreateUser(username, password):
 		session['username'] = username
-        session['userid'] = user['UserID']
+		session['userid'] = user['UserID']
 		return redirect(url_for('index'))
 	return redirect(url_for('index', err='create_failed'))
 
