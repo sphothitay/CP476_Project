@@ -1,7 +1,7 @@
 import sql_queries as queries
 from flask import Flask
 from flask import render_template, redirect, url_for
-from flask import request, session
+from flask import request, session, make_response
 from bcrypt import checkpw as check_password
 from os import urandom
 
@@ -106,16 +106,22 @@ def createTopic():
 			description = request.form['description']
 			queries.CreateTopic( name, description )
 		return redirect( url_for('topics') )
+		# TODO: Add form validation for required inputs
 	else:
 		return render_template('createTopic.html')
 
-@app.route('/createArgument/<int:topicID>', methods=["GET", "POST"])
-def createArgument():
+@app.route('/createOpinion', methods=["GET", "POST"])
+def createOpinion():
 	if request.method == "POST":
-		if 'opinion' in request.form:
-			title = request.form['argumentTitle']
+		if  'opinionTitle' in request.form and 'opinion' in request.form:
+			title = request.form['opinionTitle']
 			content = request.form['opinion']
-			return render_template('opinion.html', id=topicID, name=topicName)
+			user1ID = session['userid']
+			queries.CreateOpinion(title, content, request.args.get('topicID'), user1ID)
+		return redirect( url_for('index') )
+		# TODO: Add form validation for required inputs
+	else:
+		return render_template('createOpinion.html')
 
 @app.route('/post/<int:post_id>/send', methods=['POST'])
 def send_message(post_id):
