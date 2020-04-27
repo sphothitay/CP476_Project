@@ -4,6 +4,26 @@
 <head>
 	<link rel="stylesheet" href="/static/debate.css">
 	<script src="/static/message.js"></script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var polling = false;
+			setInterval( function() {
+				if( polling ) return; // Wait until last request is finished
+				polling = true;
+				id = window.location.pathname.split('/')[2];
+				post(
+					'/post/{id}/send',
+					{ postID : id },
+					function() {
+						res = JSON.parse(this.responseText);
+						
+						polling = false;
+					}
+				);
+			
+			}, 1000);
+		}
+	</script>
 	<title>Unnamed Argument Website</title>
 </head>
 

@@ -35,3 +35,11 @@ function sendMessage() {
 	messages.appendChild( newMsg );
 	message.value = "";
 }
+
+function post(url, data, responseHandler) {
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader('Content-Type', 'application/json');
+	xhr.send(JSON.stringify(data));
+	xhr.onload = responseHandler;
+}
