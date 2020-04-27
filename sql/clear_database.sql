@@ -5,6 +5,7 @@ DELETE FROM Topics;
 /* The above should cascade to all other tables, 
 but we will do the rest just in case */
 DELETE FROM Arguments;
+DELETE FROM Messages;
 DELETE FROM Comments;
 DELETE FROM CommentVotes;
 DELETE FROM Votes;

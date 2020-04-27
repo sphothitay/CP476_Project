@@ -29,6 +29,32 @@ VALUES (%s, %s)'''
 	except mysql.connector.Error:
 		return False
 
+def CreateArgument(Title, Content, TopicID, User1ID, User2ID):
+	queryString = '''INSERT INTO 
+Arguments (ArgumentTitle, ArgumentContent, TopicID, User1ID, User2ID) 
+VALUES (%s, %s, %d, %d, %d)'''
+
+	try:
+		cursor = GetDB().cursor()
+		cursor.execute( queryString, (name, description) )
+		cursor.close()
+		return True
+	except mysql.connector.Error:
+		return False
+
+def CreateMessage(MessageContent, ArgumentID, UserID):
+	queryString = '''INSERT INTO 
+Topics (MessageContent, ArgumentID, UserID) 
+VALUES (%s, %d, %d)'''
+
+	try:
+		cursor = GetDB().cursor()
+		cursor.execute( queryString, (name, description) )
+		cursor.close()
+		return True
+	except mysql.connector.Error:
+		return False
+
 def GetArgument( argumentID ):
 	queryString = '''SELECT * FROM Arguments AS A
 INNER JOIN Topics as T
@@ -38,6 +64,15 @@ WHERE ArgumentID=%s'''
 	if len(result) == 0:
 		return None
 	return result[0]
+
+def GetArgumentMessages( argumentID ):
+	queryString = '''SELECT * FROM Messeges
+WHERE ArgumentID=%s
+ORDER BY Created ASC'''
+	result = runQuery( queryString, (argumentID, ) )
+	if len(result) == 0:
+		return None
+	return result
 
 def GetTopics():
 	queryString = '''SELECT * FROM Topics'''
