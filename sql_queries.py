@@ -109,6 +109,16 @@ ORDER BY Created ASC'''
 		return None
 	return result
 
+def GetUserArguments( userID ):
+	queryString = '''SELECT * FROM Arguments AS A
+INNER JOIN Topics as T
+ON A.TopicID=T.TopicID
+WHERE user1ID=%s OR user2ID=%s'''
+	result = runQuery( queryString, (userID, userID) )
+	if len(result) == 0:
+		return None
+	return result
+
 def GetTopics():
 	queryString = '''SELECT * FROM Topics'''
 	return runQuery( queryString, tuple() )
