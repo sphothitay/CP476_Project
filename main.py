@@ -106,6 +106,10 @@ def createTopic():
 	else:
 		return render_template('createTopic.html')
 
+@app.route('/opinion')
+def opinion():
+	return render_template('opinion.html')
+
 @app.route('/post/<int:post_id>/send', methods=['POST'])
 def send_message(post_id):
 	argument = queries.GetArgument(post_id)
