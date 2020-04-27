@@ -1,6 +1,6 @@
 import sql_queries as queries
 from flask import Flask
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, make_response
 from flask import request, session
 from bcrypt import checkpw as check_password
 from os import urandom
@@ -10,15 +10,15 @@ app.secret_key = urandom(32)
 app.config['SESSION_TYPE'] = 'filesystem' # TODO: Change this
 
 def user_logged_in():
-	if 'username' not in session or 'userinfo' not in request.cookies:
+	if 'username' not in session or 'arguserinfo' not in request.cookies:
 		return False
-	return request.cookies['userinfo'] == session['username']
+	return request.cookies['arguserinfo'] == session['username']
 
 @app.route('/')
 @app.route('/index')
 @app.route('/home')
 def index():
-	if not user_logged_in():
+	if user_logged_in():
 		return render_template('index.html')
 	errcode = request.args.get('err')
 	if errcode is not None:
@@ -46,10 +46,10 @@ def login():
 		return redirect(url_for('index', err='not_found'))
 	
 	if check_password(password.encode('utf-8'), user['Password'].encode('utf-8')):
-		res = make_response(redirect(request.referrer or url_for('')))
-		res.set_cookie("arguserinfo", session['username'], max_age=60*60*24*7)
 		session['username'] = user['Username']
 		session['userid'] = user['UserID']
+		res = make_response(redirect(request.referrer or url_for('')))
+		res.set_cookie("arguserinfo", session['username'], max_age=60*60*24*7)
 		return res
 	
 	return redirect(url_for('index', err='invalid_login'))
@@ -72,9 +72,12 @@ def register():
 		return redirect(url_for('index', err='password_match'))
 
 	if queries.CreateUser(username, password):
-		session['username'] = username
+		user = queries.GetUserByUsername(username)
+		session['username'] = user['Username']
 		session['userid'] = user['UserID']
-		return redirect(url_for('index'))
+		res = make_response(redirect(url_for('index')))
+		res.set_cookie('arguserinfo', username, max_age=60*60*24*7)
+		return res
 	return redirect(url_for('index', err='create_failed'))
 
 @app.route('/debate')
