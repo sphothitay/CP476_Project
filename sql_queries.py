@@ -141,7 +141,10 @@ WHERE User2ID IS NOT NULL ORDER BY Created ASC LIMIT 20'''
 	return result
 
 def GetTopOpinions():
-	queryString = '''SELECT * FROM Arguments WHERE User2ID IS NULL ORDER BY Created ASC LIMIT 20'''
+	queryString = '''SELECT * FROM 
+	Arguments AS A
+	
+	WHERE User2ID IS NULL ORDER BY Created ASC LIMIT 20'''
 	result = runQuery( queryString, tuple() )
 	return result
 
@@ -177,6 +180,11 @@ def GetUserOpinions( userID ):
 	queryString = '''SELECT * FROM Arguments AS A
 INNER JOIN Topics as T 
 ON A.TopicID=T.TopicID 
+INNER JOIN
+	(SELECT ArgumentID, SUM(IF(IsUpvote, 1, -1)) as NumVotes
+	FROM Votes
+	GROUP BY ArgumentID) AS VQ
+ON A.ArgumentID=VQ.ArgumentID
 WHERE User1ID=%s AND User2ID is NULL'''
 	result = runQuery( queryString, (userID, ) )
 	return result

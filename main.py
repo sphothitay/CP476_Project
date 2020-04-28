@@ -22,8 +22,8 @@ def user_logged_in():
 @app.route('/index')
 def index():
 	if user_logged_in():
-		arguments = queries.GetUserArguments(session['userid'])
-		opinions = queries.GetTopOpinions()
+		opinions = queries.GetUserArguments(session['userid'])
+		arguments = queries.GetTopOpinions()
 		return render_template('index.html', arguments=arguments, opinions=opinions)
 	errcode = request.args.get('err')
 	if errcode is not None:
@@ -113,7 +113,6 @@ def opinions():
 		return redirect(url_for('index'))
 	opinions = queries.GetOpinions()
 	return render_template('opinions.html', opinions=opinions)
-
 
 @app.route('/createTopic', methods=["GET", "POST"])
 def createTopic():

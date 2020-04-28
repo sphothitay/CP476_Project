@@ -52,18 +52,11 @@
 	<a href="/post/{{ post.ArgumentID }}"><h3>{{ post.ArgumentTitle }}</h3></a>
 	<p>{{ post.ArgumentContent }}</p>
 	<div class="postInteractBar">
-	<p>17 votes <a href="#comments">12 comments</a></p>
+	<p>{{ post.NumVotes }} votes <a href="#comments">12 comments</a></p>
 	</div>
 </div>
 
 {% endfor %}
-
-{% for argument in arguments %}
-	<div class="post">
-		<a href="{{ url_for('getPost', post_id=argument.ArgumentID)}}"><h3>{{ argument.ArgumentTitle }}</h3></a>
-		<p>{{ argument.ArgumentContent }}</p>	
-	</div>
-	{% endfor %}
 
 </div>
 
