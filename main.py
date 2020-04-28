@@ -5,6 +5,8 @@ from flask import request, session
 from bcrypt import checkpw as check_password
 from os import urandom
 import json
+import sys
+import requests
 
 
 app = Flask(__name__)
@@ -122,6 +124,21 @@ def createTopic():
 		if 'name' in request.form and 'description' in request.form:
 			name = request.form['name']
 			description = request.form['description']
+			parameter = {"ml":"Penguin"}
+			r = requests.get('https://api.datamuse.com/words', parameter)
+			print(r.status_code, file=sys.stderr)
+			if r.status_code == 200:
+				syn_json = r.json()
+				print(syn_json, file=sys.stderr)
+				similarExists = False
+				for i in syn_json.json()[0:3]:
+					if queries.CheckSimilarTopic(i['word']):
+						similarExists = True
+						break
+				if similarExists:
+					errmsg = "A similar topic already exists."
+					return render_template('createTopic.html', error=errmsg)
+
 			queries.CreateTopic( name, description )
 		return redirect( url_for('topics') )
 		# TODO: Add form validation for required inputs

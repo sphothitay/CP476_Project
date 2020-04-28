@@ -19,19 +19,12 @@ Things we need to do to finish the site
 + ~~Hash passwords (make logging in/registering possible)~~
 + ~~Deal with sessions (so user can stay logged in across pages)~~
   + Note: [sessions are not secure](https://blog.miguelgrinberg.com/post/how-secure-is-the-flask-user-session). This is fine for our purposes, but should be kept in mind if using Flask.
-+ Remove prototype data from templates, add variables that can be filled by `Flask.render_template()`
-  + Additional considerations: users involved in arguments, comment section, 
-+ Make pages actually functional (`create post` creates a new post in the DB, same with create topic, etc)
++ ~~Remove prototype data from templates, add variables that can be filled by `Flask.render_template()`~~
+  + Additional considerations: users involved in arguments, comment section
++ ~~Make pages actually functional (`create post` creates a new post in the DB, same with create topic, etc)~~
 + Implement live chat
-  + websockets
-  + Does each message get inserted to DB, cached until end of argument, etc?
-  + Are arguments timed?
-  + Is live chat its own feature, or is it used to implement arguments?
-+ Decide on how to do user matchmaking for arguments
-  + Request a user vs. random pools
-  + Open arguments; submit argument premise and have board where users can choose what to argue
-+ Add new tables/columns where necessary
-+ Add database triggers if applicable
+  + ~~websockets~~ ;; went with polling approach instead
++ Add database triggers for voting (delete upvote on downvote insert)
 + Decide on how to "archive" past arguments
   + Store archives as read-only files
   + Store archives in their own table
