@@ -58,6 +58,13 @@
 	</div>
 </div>
 
+{% for argument in arguments %}
+	<div class="post">
+		<a href="{{ url_for('getPost', post_id=argument.ArgumentID)}}"><h3>{{ argument.ArgumentTitle }}</h3></a>
+		<p>{{ argument.ArgumentContent }}</p>	
+	</div>
+	{% endfor %}
+
 </div>
 
 
