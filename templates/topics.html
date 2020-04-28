@@ -15,7 +15,7 @@
 
     <div id="topicSearch">
 		<form name="topicSearchForm" action="topics" method="GET">
-		<input class="w40" type="text" name="search" placeholder="Search..Test">
+		<input class="w40" type="text" name="search" placeholder="Search...">
 		<button class="w10" type="submit">Go</button>
 		</form>
 	</div>
@@ -26,9 +26,7 @@
         <ul>
             {% for topic in topics %}
             <div class="card">
-                <form action="opinion" method="POST" name="selectTopic"></form>
-                    <li>{{ topic.TopicName }}</li>
-                </form>
+                    <li><a href="{{ url_for('createOpinion', topicID=topic.TopicID)}}" class="topic">{{ topic.TopicName }}</a></li>
             </div>
             {% endfor %}
         </ul>

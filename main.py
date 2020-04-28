@@ -6,6 +6,7 @@ from bcrypt import checkpw as check_password
 from os import urandom
 import json
 
+
 app = Flask(__name__)
 app.secret_key = urandom(32)
 app.config['SESSION_TYPE'] = 'filesystem' # TODO: Change this
@@ -50,7 +51,7 @@ def login():
 	if check_password(password.encode('utf-8'), user['Password'].encode('utf-8')):
 		session['username'] = user['Username']
 		session['userid'] = user['UserID']
-		res = make_response(redirect(request.referrer or url_for('')))
+		res = make_response(redirect(request.referrer or url_for('index')))
 		res.set_cookie("arguserinfo", session['username'], max_age=60*60*24*7)
 		res.set_cookie("arguserid", session['userid'], max_age=60*60*24*7)
 		return res
@@ -113,12 +114,23 @@ def createTopic():
 			description = request.form['description']
 			queries.CreateTopic( name, description )
 		return redirect( url_for('topics') )
+		# TODO: Add form validation for required inputs
 	else:
 		return render_template('createTopic.html')
 
-@app.route('/opinion')
-def opinion():
-	return render_template('opinion.html')
+@app.route('/createOpinion', methods=["GET", "POST"])
+def createOpinion():
+	if request.method == "POST":
+		if  'opinionTitle' in request.form and 'opinion' in request.form:
+			title = request.form['opinionTitle']
+			content = request.form['opinion']
+			topicID = request.form['topicID']
+			user1ID = session['userid']
+			id = queries.CreateOpinion(title, content, topicID, user1ID)
+		return redirect( url_for('getPost', post_id=id) )
+		# TODO: Add form validation for required inputs
+	else:
+		return render_template('createOpinion.html')
 
 @app.route('/post/<int:post_id>/send', methods=['POST'])
 def send_message(post_id):

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="/static/main.css">
+    <link rel="stylesheet" href="/static/topics.css">
+    <title>Opinion Creation</title>
+	<script type="text/javascript">
+	window.onload = function() {
+		var url = new URL(window.location.href);
+		var topicID = url.searchParams.get('topicID');
+		var topicInput = document.getElementById('topicid');
+		topicInput.value = topicID;
+	}
+	</script>
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+    <h1>Add opinion</h1>
+
+    <form action="createOpinion" method="POST" name="newopinion">
+        <label for="opinionTitleLabel">Enter Post Title:</label>
+        <input type="text" id="opinionTitleInput" name="opinionTitle", placeholder="I believe so and so should be this and that."><br>
+        <label for="opinionLabel">Enter opinion or stance:</label>
+        <textarea id="opinionTextArea" name="opinion", placeholder="The reason I believe this and that is because of so and so."></textarea>
+        <input type="hidden" id="topicid" name="topicID" />
+		<div id="opinionSubmitButton">
+            <a class="w10 button" href="javascript:void(0)" 
+            onclick="document.newopinion.submit()">Create post</a>
+        </div>
+    </form>
+
+</body>
+
+</html>
