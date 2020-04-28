@@ -48,7 +48,7 @@ function sendMessage() {
 		return;
 	}
 
-	post('/posts/' + getPostId() + '/send', {'text' : message.value}, function() {;
+	post('/post/' + getPostId() + '/send', {'text' : message.value}, function() {;
 		addMessage(message.value, this.responseText, true);
 		message.value = "";
 	});
