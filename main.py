@@ -23,8 +23,9 @@ def user_logged_in():
 def index():
 	print(" route", file=sys.stderr)
 	if user_logged_in():
-		opinions = queries.GetAllOpinions()
-		return render_template('index.html', opinions=opinions)
+		arguments = queries.GetUserArguments(session['userid'])
+		opinions = queries.GetUserOpinions(session['userid'])
+		return render_template('index.html', opinions=opinions, arguments=arguments)
 	errcode = request.args.get('err')
 	if errcode is not None:
 		return handle_login_error(errcode)
@@ -109,6 +110,11 @@ def topics():
 	topics = queries.GetTopics()
 	return render_template('topics.html', topics=topics)
 
+@app.route('/opinions')
+def opinions():
+	opinions = queries.GetOpinions()
+	return render_template('opinions.html', opinions=opinions)
+
 
 @app.route('/createTopic', methods=["GET", "POST"])
 def createTopic():
@@ -151,6 +157,12 @@ def getRecent(post_id, message_id):
 @app.route('/post/<int:post_id>')
 def getPost(post_id):
 	argument = queries.GetArgument(post_id)
+	# TODO: edit debate template, render template with debate contents
+	return render_template('debate.html', arg=argument)
+
+@app.route('/post/<int:user_id>')
+def getUserPosts(user_id):
+	argument = queries.GetUserArguments(user_id)
 	# TODO: edit debate template, render template with debate contents
 	return render_template('debate.html', arg=argument)
 

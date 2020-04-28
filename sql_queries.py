@@ -115,12 +115,20 @@ ORDER BY Created ASC'''
 		return None
 	return result
 
-def GetAllOpinions():
+def GetOpinions():
 	queryString = '''SELECT * FROM Arguments
 WHERE User2ID is NULL
 ORDER BY Created ASC'''
 	result = runQuery( queryString, () )
 	print(str(len(result))+" heyyeyy", file=sys.stderr)
+	return result
+
+def GetUserOpinions( userID ):
+	queryString = '''SELECT * FROM Arguments AS A
+INNER JOIN Topics as T 
+ON A.TopicID=T.TopicID 
+WHERE User1ID=%s AND User2ID is NULL'''
+	result = runQuery( queryString, (userID, ) )
 	return result
 
 def GetRecent( argumentID, messageID ):
@@ -134,13 +142,12 @@ ORDER BY Created ASC'''
 
 def GetUserArguments( userID ):
 	queryString = '''SELECT * FROM Arguments AS A
-INNER JOIN Topics as T
-ON A.TopicID=T.TopicID
-WHERE user1ID=%s OR user2ID=%s'''
+INNER JOIN Topics as T 
+ON A.TopicID=T.TopicID 
+WHERE User1ID=%s OR User2ID=%s'''
 	result = runQuery( queryString, (userID, userID) )
-	if len(result) == 0:
-		return None
 	return result
+
 
 def GetTopics():
 	queryString = '''SELECT * FROM Topics'''
