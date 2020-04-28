@@ -32,6 +32,28 @@ body {
 	font-family: var(--font1);
 }
 
+.votes {
+	margin: 0;
+	padding: 0.4rem 0.4rem;
+	display: inline;
+	overflow: auto;
+	width: 1.4rem;
+	max-width: 1.4rem;
+}
+
+.vote {
+	display: block;
+	color: var(--color3);
+}
+
+.vote .selected {
+	color: var(--color2);
+}
+
+#messageform {
+	display: none;
+}
+
 .topic {
 	font-weight: bold;
 	font-size: 1.2rem;
