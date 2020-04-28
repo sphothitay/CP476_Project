@@ -109,6 +109,15 @@ ORDER BY Created ASC'''
 		return None
 	return result
 
+def GetRecent( argumentID, messageID ):
+	queryString = '''SELECT * FROM Messeges
+WHERE ArgumentID=%d and MessageID > %d 
+ORDER BY Created ASC'''
+	result = runQuery( queryString, (argumentID, messageID, ) )
+	if len(result) == 0:
+		return None
+	return result
+
 def GetUserArguments( userID ):
 	queryString = '''SELECT * FROM Arguments AS A
 INNER JOIN Topics as T

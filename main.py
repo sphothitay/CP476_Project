@@ -122,6 +122,11 @@ def send_message(post_id):
 	res = make_response('')
 	return res
 
+@app.route('/post/<int:post_id>/<int:message_id>/getRecent', methods=['POST'])
+def getRecent(message_id):
+	result = queries.GetRecent(post_id, message_id)
+	return result
+
 @app.route('/post/<int:post_id>')
 def getPost(post_id):
 	argument = queries.GetArgument(post_id)
