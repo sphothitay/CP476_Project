@@ -3,7 +3,13 @@
     <head>
         <link rel="stylesheet" href="/static/main.css">
         <link rel="stylesheet" href="/static/topics.css">
-        <title>Browse Topics</title>
+        <title>Add Topic</title>
+        <script type="text/javascript">
+            function hideElement( id ) {
+                elem = document.getElementById( id );
+                if( elem ) elem.style.display = "none";
+            }
+        </script>
     </head>
 
     <body>
@@ -22,6 +28,13 @@
 				onclick="document.newtopic.submit()">Add</a>
            </div>
         </form>
+
+        {% if error is defined %}
+            <div class="errorbox" id="topicerror">
+                <p>{{ error }}</p>
+                <a class="close" href="javascript:void(0)" onclick="hideElement('topicerror')">x</a>
+            </div>
+        {% endif %}
     </body>
 
 </html>
