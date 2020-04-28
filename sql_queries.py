@@ -12,7 +12,8 @@ VALUES (%s, %s)'''
 		cursor = GetDB().cursor()
 		cursor.execute( queryString, (username, hashed) )
 		cursor.close()
-		return True
+		_id = cursor.lastrowid
+		return _id
 	except mysql.connector.Error:
 		return False
 
@@ -25,7 +26,8 @@ VALUES (%s, %s)'''
 		cursor = GetDB().cursor()
 		cursor.execute( queryString, (name, description) )
 		cursor.close()
-		return True
+		_id = cursor.lastrowid
+		return _id
 	except mysql.connector.Error:
 		return False
 
@@ -37,7 +39,8 @@ VALUES (%s, %s, %s, %s, %s)'''
 	try:
 		cursor = GetDB().cursor()
 		cursor.execute( queryString, (Title, Content, TopicID, User1ID, User2ID) )
-		return True
+		_id = cursor.lastrowid
+		return _id
 	except mysql.connector.Error:
 		return False
 
@@ -49,8 +52,8 @@ VALUES (%s, %s, %s, %s)'''
 	try:
 		cursor = GetDB().cursor()
 		cursor.execute( queryString, (Title, Content, TopicID, User1ID) )
-		cursor.close()
-		return True
+		_id = cursor.lastrowid
+		return _id
 	except mysql.connector.Error:
 		return False
 
@@ -72,8 +75,9 @@ VALUES (%s, %s, %s, %s)'''
 	try:
 		cursor = GetDB().cursor()
 		cursor.execute( queryString, (name, description) )
+		_id = cursor.lastrowid
 		cursor.close()
-		return True
+		return _id
 	except mysql.connector.Error:
 		return False
 
@@ -85,8 +89,9 @@ VALUES (%s, %s, %s)'''
 	try:
 		cursor = GetDB().cursor()
 		cursor.execute( queryString, (name, description) )
+		_id = cursor.lastrowid
 		cursor.close()
-		return True
+		return _id
 	except mysql.connector.Error:
 		return False
 
@@ -105,6 +110,15 @@ def GetArgumentMessages( argumentID ):
 WHERE ArgumentID=%s
 ORDER BY Created ASC'''
 	result = runQuery( queryString, (argumentID, ) )
+	if len(result) == 0:
+		return None
+	return result
+
+def GetRecent( argumentID, messageID ):
+	queryString = '''SELECT * FROM Messeges
+WHERE ArgumentID=%d and MessageID > %d 
+ORDER BY Created ASC'''
+	result = runQuery( queryString, (argumentID, messageID, ) )
 	if len(result) == 0:
 		return None
 	return result
