@@ -59,7 +59,7 @@ function addMessage(content, id, sent) {
 	var inner = document.createElement( "div" );
 	var textP = document.createElement( "p" );
 
-	textP.appendChild( document.createTextNode( message.value ) );
+	textP.appendChild( document.createTextNode( content ) );
 	inner.appendChild( textP );
 	newMsg.appendChild( inner );
 	inner.classList.add( "chatMessage" );

@@ -136,13 +136,13 @@ def createOpinion():
 def send_message(post_id):
 	# Validation here would be nice, 1000000000 things could go wrong
 	argument = queries.GetArgument(post_id)
-	message = json.loads(request.json)['text']
-	return queries.CreateMessage(message, post_id, session['userid'])
+	message = request.json['text']
+	return json.dumps(queries.CreateMessage(message, post_id, session['userid']))
 
 @app.route('/post/<int:post_id>/<int:message_id>/getRecent', methods=['POST'])
 def getRecent(post_id, message_id):
 	result = queries.GetRecent(post_id, message_id)
-	return json.dumps(result if result else [])
+	return json.dumps(result if result else [], default=str)
 
 @app.route('/post/<int:post_id>')
 def getPost(post_id):

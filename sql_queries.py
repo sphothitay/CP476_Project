@@ -83,12 +83,12 @@ VALUES (%s, %s, %s, %s)'''
 
 def CreateMessage(MessageContent, ArgumentID, UserID):
 	queryString = '''INSERT INTO 
-Topics (MessageContent, ArgumentID, UserID) 
+Messages (MessageContent, ArgumentID, UserID) 
 VALUES (%s, %s, %s)'''
 
 	try:
 		cursor = GetDB().cursor()
-		cursor.execute( queryString, (name, description) )
+		cursor.execute( queryString, (MessageContent, ArgumentID, UserID) )
 		_id = cursor.lastrowid
 		cursor.close()
 		return _id
