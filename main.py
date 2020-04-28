@@ -4,6 +4,9 @@ from flask import render_template, redirect, url_for, make_response
 from flask import request, session
 from bcrypt import checkpw as check_password
 from os import urandom
+import sys
+import urllib.parse as urlparse
+from urllib.parse import parse_qs
 
 app = Flask(__name__)
 app.secret_key = urandom(32)
@@ -19,7 +22,20 @@ def user_logged_in():
 @app.route('/home')
 def index():
 	if user_logged_in():
-		return render_template('index.html')
+		opinions = queries.GetOpinions()
+		arguments = queries.GetUserArguments(session['userid'])
+		if opinions is not None and arguments is not None:
+			print("Both are not empty", file=sys.stderr)
+			return render_template('index.html', opinions=opinions, arguments=arguments)
+		elif opinions is not None and arguments is None:
+			print("Opinions is not empty", file=sys.stderr)
+			return render_template('index.html', opinions=opinions)
+		elif opinions is None and arguments is not None:
+			print("Arguments is not empty", file=sys.stderr)
+			return render_template('index.html', arguments=arguments)
+		else:
+			print("Opinions and arguments is empty", file=sys.stderr)
+			return render_template('index.html')
 	errcode = request.args.get('err')
 	if errcode is not None:
 		return handle_login_error(errcode)
@@ -118,9 +134,15 @@ def createOpinion():
 	if request.method == "POST":
 		if  'opinionTitle' in request.form and 'opinion' in request.form:
 			title = request.form['opinionTitle']
+			print(title, file=sys.stderr)
 			content = request.form['opinion']
+			print(content, file=sys.stderr)
 			user1ID = session['userid']
-			queries.CreateOpinion(title, content, request.args.get('topicID'), user1ID)
+			print(user1ID, file=sys.stderr)
+			topicid = request.form['topicid']
+			print(topicid, file=sys.stderr)
+			test = queries.CreateOpinion(title, content, topicid, user1ID)
+			print(test, file=sys.stderr)
 		return redirect( url_for('index') )
 		# TODO: Add form validation for required inputs
 	else:

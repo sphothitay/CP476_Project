@@ -1,6 +1,7 @@
 import mysql.connector
 import bcrypt
 import os
+import sys
 
 def CreateUser( username, password ):
 	queryString = '''INSERT INTO 
@@ -22,6 +23,7 @@ Topics (TopicName, TopicDescription)
 VALUES (%s, %s)'''
 
 	try:
+		print(queryString, file=sys.stderr)
 		cursor = GetDB().cursor()
 		cursor.execute( queryString, (name, description) )
 		cursor.close()
@@ -37,16 +39,18 @@ VALUES (%s, %s, %d, %d, %d)'''
 	try:
 		cursor = GetDB().cursor()
 		cursor.execute( queryString, (Title, Content, TopicID, User1ID, User2ID) )
+		cursor.close()
 		return True
 	except mysql.connector.Error:
 		return False
 
 def CreateOpinion(Title, Content, TopicID, User1ID):
 	queryString = '''INSERT INTO 
-Arguments (ArgumentTitle, ArgumentContent, TopicID, User1ID, User2ID) 
+Arguments (ArgumentTitle, ArgumentContent, TopicID, User1ID) 
 VALUES (%s, %s, %d, %d)'''
 
 	try:
+		print(queryString, file=sys.stderr)
 		cursor = GetDB().cursor()
 		cursor.execute( queryString, (Title, Content, TopicID, User1ID) )
 		cursor.close()
@@ -122,6 +126,13 @@ WHERE user1ID=%s OR user2ID=%s'''
 def GetTopics():
 	queryString = '''SELECT * FROM Topics'''
 	return runQuery( queryString, tuple() )
+
+def GetOpinions():
+	queryString = '''SELECT * FROM Arguments AS A INNER JOIN Topics as T ON A.TopicID = T.TopicID WHERE User2ID IS NULL'''
+	result = runQuery( queryString, tuple() )
+	if len(result) == 0:
+		return None
+	return result
 
 def GetComment( commentID ):
 	queryString = '''SELECT * FROM Comments WHERE CommentID=%s'''
