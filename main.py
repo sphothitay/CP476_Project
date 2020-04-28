@@ -120,22 +120,26 @@ def createTopic():
 	if not user_logged_in():
 		return redirect(url_for('index'))
 	if request.method == "POST":
-		if 'name' in request.form and 'description' in request.form:
+		errcode = request.args.get('error')
+		if errcode is not None:
+			return handle_topic_error(errcode)
+		elif 'name' in request.form and 'description' in request.form:
 			name = request.form['name']
 			description = request.form['description']
-			parameter = {"ml":"Penguin"}
+			parameter = {"rel_syn":name}
 			r = requests.get('https://api.datamuse.com/words', parameter)
 			if r.status_code == 200:
 				syn_json = r.json()
+				if not syn_json :
+					queries.CreateTopic( name, description )
+					return redirect( url_for('topics') )
 				similarExists = False
-				for i in syn_json.json()[0:3]:
+				for i in syn_json[0:3]:
 					if queries.CheckSimilarTopic(i['word']):
 						similarExists = True
 						break
 				if similarExists:
-					errmsg = "A similar topic already exists."
-					return render_template('createTopic.html', error=errmsg)
-
+					return render_template('createTopic.html', error="A similar topic already exists please add a different topic")
 			queries.CreateTopic( name, description )
 		return redirect( url_for('topics') )
 		# TODO: Add form validation for required inputs
@@ -215,6 +219,14 @@ def handle_login_error(errcode):
 	if errcode == 'missing_fields':
 		errmsg = 'All fields must be filled to continue'
 	return render_template('login.html', error=errmsg)
+
+def handle_topic_error(errcode):
+	errmsg = 'Something went wrong. Try again later.'
+
+	if errcode == 'similar_topic_exists':
+		errmsg = 'A similar topic already exists please add a different topic'
+
+	return render_template('createTopic.html', error=errmsg)
 
 @app.errorhandler(404)
 def page_not_found(e):
