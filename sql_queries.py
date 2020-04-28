@@ -1,62 +1,32 @@
 import mysql.connector
 import bcrypt
 import os
-import sys
+from time import sleep
 
 def CreateUser( username, password ):
 	queryString = '''INSERT INTO 
 Users (Username, Password) 
 VALUES (%s, %s)'''
 	hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-
-	try:
-		cursor = GetDB().cursor(buffered=True)
-		cursor.execute( queryString, (username, hashed) )
-		cursor.close()
-		_id = cursor.lastrowid
-		return _id
-	except mysql.connector.Error:
-		return False
+	return doInsert( queryString, (username, hashed) )
 
 def CreateTopic(name, description):
 	queryString = '''INSERT INTO 
 Topics (TopicName, TopicDescription) 
 VALUES (%s, %s)'''
-
-	try:
-		cursor = GetDB().cursor(buffered=True)
-		cursor.execute( queryString, (name, description) )
-		cursor.close()
-		_id = cursor.lastrowid
-		return _id
-	except mysql.connector.Error:
-		return False
+	return doInsert( queryString, (name, description) )
 
 def CreateArgument(Title, Content, TopicID, User1ID, User2ID):
 	queryString = '''INSERT INTO 
 Arguments (ArgumentTitle, ArgumentContent, TopicID, User1ID, User2ID) 
 VALUES (%s, %s, %s, %s, %s)'''
-
-	try:
-		cursor = GetDB().cursor(buffered=True)
-		cursor.execute( queryString, (Title, Content, TopicID, User1ID, User2ID) )
-		_id = cursor.lastrowid
-		return _id
-	except mysql.connector.Error:
-		return False
+	return doInsert( queryString, (Title, Content, TopicID, User1ID, User2ID) )
 
 def CreateOpinion(Title, Content, TopicID, User1ID):
 	queryString = '''INSERT INTO 
 Arguments (ArgumentTitle, ArgumentContent, TopicID, User1ID) 
 VALUES (%s, %s, %s, %s)'''
-
-	try:
-		cursor = GetDB().cursor(buffered=True)
-		cursor.execute( queryString, (Title, Content, TopicID, User1ID) )
-		_id = cursor.lastrowid
-		return _id
-	except mysql.connector.Error:
-		return False
+	return doInsert( queryString, (Title, Content, TopicID, User1ID) )
 
 def UpvoteArgument(UserID, ArgumentID):
 	queryString = '''INSERT INTO Votes (IsUpvote, UserID, ArgumentID) VALUES (true, %s, %s)
@@ -64,7 +34,8 @@ ON DUPLICATE KEY UPDATE
 	IsUpvote = true
 '''
 	try:
-		cursor = GetDB().cursor(buffered=True)
+		db = GetDB()
+		cursor = db.cursor(buffered=True)
 		cursor.execute( queryString, (UserID, ArgumentID) )
 		return True # Don't use lastrowid here, in case of update
 	except mysql.connector.Error:
@@ -102,40 +73,19 @@ WHERE ArgumentID = %s'''
 		return False
 	return True
 
-
-	queryString = '''INSERT INTO 
-Arguments (ArgumentTitle, ArgumentContent, TopicID, User1ID, User2ID) 
-VALUES (%s, %s, %s, %s)'''
-
-	try:
-		cursor = GetDB().cursor(buffered=True)
-		cursor.execute( queryString, (name, description) )
-		_id = cursor.lastrowid
-		cursor.close()
-		return _id
-	except mysql.connector.Error:
-		return False
-
 def CreateMessage(MessageContent, ArgumentID, UserID):
 	queryString = '''INSERT INTO 
 Messages (MessageContent, ArgumentID, UserID)
 VALUES (%s, %s, %s)'''
-
-	try:
-		cursor = GetDB().cursor(buffered=True)
-		cursor.execute( queryString, (MessageContent, ArgumentID, UserID) )
-		_id = cursor.lastrowid
-		cursor.close()
-		return _id
-	except mysql.connector.Error:
-		return False
+	return doInsert( queryString, (MessageContent, ArgumentID, UserID) )
 
 def GetTopArguments():
 	queryString = '''SELECT * FROM Arguments as A
 INNER JOIN
-	(SELECT ArgumentID, SUM( CASE WHEN IsUpvote THEN 1 ELSE -1 ) as NumVotes
+	(SELECT ArgumentID, SUM(IF(IsUpvote,1,-1)) as NumVotes
 	FROM Votes
-	GROUP BY ArgumentID) voteQuery ON A.ArgumentID=voteQuery.ArgumentID
+	GROUP BY ArgumentID) voteQuery
+ON A.ArgumentID=voteQuery.ArgumentID
 WHERE User2ID IS NOT NULL ORDER BY Created ASC LIMIT 20'''
 	result = runQuery( queryString, tuple() )
 	return result
@@ -180,7 +130,6 @@ def GetOpinions():
 WHERE User2ID is NULL
 ORDER BY Created ASC'''
 	result = runQuery( queryString, () )
-	print(str(len(result))+" heyyeyy", file=sys.stderr)
 	return result
 
 def GetUserOpinions( userID ):
@@ -275,8 +224,22 @@ def GetDB():
 		databaseConnection.autocommit = True
 	return databaseConnection
 
+def doInsert( queryString, params ):
+	try:
+		db = GetDB()
+		while not db.is_connected(): sleep(10) # Wait until connection is free
+		cursor = db.cursor(buffered=True)
+		cursor.execute( queryString, params )
+		cursor.close()
+		_id = cursor.lastrowid
+		return _id
+	except mysql.connector.Error:
+		return False
+
+
 def runQuery( queryString, params ):
 	db = GetDB()
+	while not db.is_connected(): sleep(10) # Wait until connection is free
 	cursor = db.cursor(buffered=True)
 	cursor.execute( queryString, params )
 	result = cursor.fetchall()
