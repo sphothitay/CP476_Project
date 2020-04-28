@@ -6,14 +6,14 @@
 	<script src="/static/message.js"></script>
 	<script type="text/javascript">
 		window.onload = function() {
-			loadNewComments( 0, function(){} );
+			loadNewMessages( 0, function(){} );
 			var polling = false;
 			setInterval( function() {
 				if( polling ) return; // Wait until last request is finished
 				polling = true;
 				var messages = document.getElementById("messages").querySelectorAll("#messages > div");
-				var latestID = messages[messages.length-1].id;
-				loadNewComments( latestID, function() { polling = false; } );
+				var latestID = messages.length ? messages[messages.length-1].id : 0;
+				loadNewMessages( latestID, function() { polling = false; } );
 			}, 1000);
 		}
 	</script>

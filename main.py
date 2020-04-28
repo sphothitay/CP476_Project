@@ -140,9 +140,9 @@ def send_message(post_id):
 	return queries.CreateMessage(message, post_id, session['userid'])
 
 @app.route('/post/<int:post_id>/<int:message_id>/getRecent', methods=['POST'])
-def getRecent(message_id):
+def getRecent(post_id, message_id):
 	result = queries.GetRecent(post_id, message_id)
-	return json.dumps(result)
+	return json.dumps(result if result else [])
 
 @app.route('/post/<int:post_id>')
 def getPost(post_id):

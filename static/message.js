@@ -9,7 +9,7 @@ function getCookie(name){
 }
 
 function getPostId() {
-	if(!window.location.pathname.startswith('/post/')) return null;
+	if(!window.location.pathname.startsWith('/post/')) return null;
 	var parts = window.location.pathname.split('/');
 	if(parts.length < 3) return;
 	return id = parts[2];
@@ -19,7 +19,7 @@ function loadNewMessages(latestID, finishedCallback) {
 	var userid = getCookie('arguserid');
 	var id = getPostId();
 	post(
-		'/post/' + id + '/' + latestID + '/comments',
+		'/post/' + id + '/' + latestID + '/getRecent',
 		'',
 		function() {
 			res = JSON.parse(this.responseText);
