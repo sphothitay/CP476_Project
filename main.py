@@ -5,12 +5,12 @@ from flask import request, session
 from bcrypt import checkpw as check_password
 from os import urandom
 import json
-import sys
 
 
 app = Flask(__name__)
 app.secret_key = urandom(32)
 app.config['SESSION_TYPE'] = 'filesystem' # TODO: Change this
+
 
 def user_logged_in():
 	if 'username' not in session or 'arguserinfo' not in request.cookies:
@@ -21,7 +21,6 @@ def user_logged_in():
 @app.route('/home')
 @app.route('/index')
 def index():
-	print(" route", file=sys.stderr)
 	if user_logged_in():
 		arguments = queries.GetUserArguments(session['userid'])
 		opinions = queries.GetTopOpinions()
@@ -38,6 +37,7 @@ def logout():
 	res.set_cookie('arguserid', '', max_age=0)
 	if 'username' in session:
 		del session['username']
+	if 'userid' in session:
 		del session['userid']
 	return res
 
@@ -61,6 +61,16 @@ def login():
 		return res
 	
 	return redirect(url_for('index', err='invalid_login'))
+
+@app.route('/post/<int:post_id>/join', methods=["POST"])
+def joinArgument(post_id):
+	return json.dumps( queries.OpinionToArgument( session['userid'], post_id ) )
+
+@app.route('/post/<int:post_id>/member', methods=["POST"])
+def isArgumentMember(post_id): # check if user is a member
+	arg = queries.GetArgument(post_id)
+	if not arg: return "false"
+	return json.dumps( session['userid'] in (arg['User1ID'], arg['User2ID']) )
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -89,35 +99,26 @@ def register():
 		return res
 	return redirect(url_for('index', err='create_failed'))
 
-@app.route('/debate')
-def debate():
-	if not user_logged_in():
-		return redirect(url_for('index'))
-	topic = 'penguins'
-	messages = [
-		{ 'message':'Hello World!', 'sent': False}, 
-		{ 'message':'Hello to you too!', 'sent': True}
-	]
-	related = [
-		{'href': '#test-1', 'title': 'Some other thing'},
-		{'href': '#test-2', 'title': 'A related posty post'}
-	]
-	return render_template('debate.html', topic=topic, messages=messages, related=related )
-
 # TODO: Use TopicDescription & TopicID in topics.html template
 @app.route('/topics')
 def topics():
+	if not user_logged_in():
+		return redirect(url_for('index'))
 	topics = queries.GetTopics()
 	return render_template('topics.html', topics=topics)
 
 @app.route('/opinions')
 def opinions():
+	if not user_logged_in():
+		return redirect(url_for('index'))
 	opinions = queries.GetOpinions()
 	return render_template('opinions.html', opinions=opinions)
 
 
 @app.route('/createTopic', methods=["GET", "POST"])
 def createTopic():
+	if not user_logged_in():
+		return redirect(url_for('index'))
 	if request.method == "POST":
 		if 'name' in request.form and 'description' in request.form:
 			name = request.form['name']
@@ -130,6 +131,8 @@ def createTopic():
 
 @app.route('/createOpinion', methods=["GET", "POST"])
 def createOpinion():
+	if not user_logged_in():
+		return redirect(url_for('index'))
 	if request.method == "POST":
 		if  'opinionTitle' in request.form and 'opinion' in request.form:
 			title = request.form['opinionTitle']
@@ -146,12 +149,22 @@ def createOpinion():
 def send_message(post_id):
 	# Validation here would be nice, 1000000000 things could go wrong
 	argument = queries.GetArgument(post_id)
+	if session['userid'] not in (argument['User1ID'], argument['User2ID']):
+		return "false"
 	message = request.json['text']
 	return json.dumps(queries.CreateMessage(message, post_id, session['userid']))
 
 @app.route('/post/<int:post_id>/upvote', methods=['POST'])
 def upvote(post_id):
-	queries.
+	return json.dumps(queries.UpvotePost(session['userid'], post_id))
+
+@app.route('/post/<int:post_id>/downvote', methods=['POST'])
+def downvote(post_id):
+	return json.dumps(queries.DownvotePost(session['userid'], post_id))
+
+@app.route('/post/<int:post_id>/clearvote', methods=['POST'])
+def removeVote(post_id):
+	return json.dumps(queries.RemoveVote(session['userid'], post_id))
 
 @app.route('/post/<int:post_id>/<int:message_id>/getRecent', methods=['POST'])
 def getRecent(post_id, message_id):
@@ -160,15 +173,19 @@ def getRecent(post_id, message_id):
 
 @app.route('/post/<int:post_id>')
 def getPost(post_id):
+	if not user_logged_in():
+		return redirect(url_for('index'))
 	argument = queries.GetArgument(post_id)
-	# TODO: edit debate template, render template with debate contents
 	return render_template('debate.html', arg=argument)
 
-@app.route('/post/<int:user_id>')
+@app.route('/post/user/<int:user_id>')
 def getUserPosts(user_id):
-	argument = queries.GetUserArguments(user_id)
-	# TODO: edit debate template, render template with debate contents
-	return render_template('debate.html', arg=argument)
+	if not user_logged_in():
+		return redirect(url_for('index'))
+	user = queries.GetUser(user_id)
+	arguments = queries.GetUserArguments(user_id)
+	opinions = queries.GetUserOpinions(user_id)
+	return render_template('debate.html', opinions=opinions, arguments=arguments, Title='Posts from ' + user['Username'])
 
 # TODO: finish this function, add error option for login page
 def handle_login_error(errcode):
