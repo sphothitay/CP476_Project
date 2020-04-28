@@ -11,18 +11,12 @@
 {% include 'navbar.html' %}
 
 <div id="recentDialog">
-	<div class="recentPost">
-	<a href="#"><h3>Recent Post 1 Title</h3></a>
-	<p>Some information related to the logged in user/post. These elements (class "recentPost") will be created by javascript/backend.</p>
-	</div>
-	<div class="recentPost">
-	<a href="#"><h3>Recent Post 2 Title</h3></a>
-	<p>This post has multiple sentences of text, and would overflow if not cut off early. This demonstrates a need for a max-height property in the CSS.</p>
-	</div>
-	<div class="recentPost">
-	<a href="#"><h3>Recent Post 3 Title</h3></a>
-	<p>This post has short text; it should have some empty space.</p>
-	</div>
+	{% for opinion in opinions %}
+		<div class="recentPost">
+				<a href="{{ url_for('getPost', post_id=opinion.ArgumentID)}}"><h3>{{ opinion.ArgumentTitle }}</h3></a>
+				<p>{{ opinion.ArgumentContent }}</p>
+		</div>
+	{% endfor %}
 </div>
 
 <div id="optionsDialog">

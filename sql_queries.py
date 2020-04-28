@@ -1,6 +1,7 @@
 import mysql.connector
 import bcrypt
 import os
+import sys
 
 def CreateUser( username, password ):
 	queryString = '''INSERT INTO 
@@ -112,6 +113,14 @@ ORDER BY Created ASC'''
 	result = runQuery( queryString, (argumentID, ) )
 	if len(result) == 0:
 		return None
+	return result
+
+def GetAllOpinions():
+	queryString = '''SELECT * FROM Arguments
+WHERE User2ID is NULL
+ORDER BY Created ASC'''
+	result = runQuery( queryString, () )
+	print(str(len(result))+" heyyeyy", file=sys.stderr)
 	return result
 
 def GetRecent( argumentID, messageID ):

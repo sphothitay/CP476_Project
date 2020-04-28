@@ -28,6 +28,8 @@ INSERT INTO Arguments (ArgumentTitle, ArgumentContent, User1ID, User2ID, TopicID
 VALUES ('Another Argument', 'This is the first argument with the name "Another Argument"', 3, 1, 4);
 INSERT INTO Arguments (ArgumentTitle, ArgumentContent, User1ID, User2ID, TopicID)
 VALUES ('Another Argument', 'This just shows that multiple arguments can have the same name', 3, 4, 2);
+INSERT INTO Arguments (ArgumentTitle, ArgumentContent, User1ID, TopicID)
+VALUES ('Opinion', 'This just shows that multiple arguments can have the same name', 3, 2);
 
 INSERT INTO Messages (MessageContent, ArgumentID, UserID)
 VALUES ('opinion', 1, 1);
