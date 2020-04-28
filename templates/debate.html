@@ -15,6 +15,30 @@
 				var latestID = messages.length ? messages[messages.length-1].id : 0;
 				loadNewMessages( latestID, function() { polling = false; } );
 			}, 1000);
+			
+			// A lot of things broke when I tried this
+			//var id = getPostId();
+			//memberCheck(id);
+		}
+		
+		function memberCheck(arg_id) {
+			post('/post/'+id+'/member', {}, function() {
+				var res = JSON.parse(this.responseText);
+				if( res ) {
+					document.getElementById("joinBtn").style.display = "none";
+					document.getElementById("messageform").style.display = "";
+				}
+			} );
+		}
+		
+		function joinArgument(arg_id) {
+			post('/post/' + arg_id + '/join', '', function() {
+				var joined = JSON.parse(this.responseText);
+				if( joined ) {
+					document.getElementById("joinBtn").style.display = "none";
+					document.getElementById("messageform").style.display = "";
+				}
+			});
 		}
 	</script>
 	<title>Unnamed Argument Website</title>
@@ -48,6 +72,10 @@
 	<div id="chatWindow">
 		<div class="messages" id="messages">
 		</div>
+		<!-- This breaks things
+		<a id="joinBtn" href="javascript:void(0)" onclick="joinArgument({{ arg.ArgumentID }})" class="button w20">Join Argument</a>
+		<div id="messageform">
+		-->
 		<div>
 			<textarea id="message" name="message" class="w80" placeholder="say something..."></textarea>
 			<input type="submit" id="sendmessage" class="w30" value="send" onclick="sendMessage()" />
