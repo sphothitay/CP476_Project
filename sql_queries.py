@@ -10,7 +10,7 @@ VALUES (%s, %s)'''
 	hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
 	try:
-		cursor = GetDB().cursor()
+		cursor = GetDB().cursor(buffered=True)
 		cursor.execute( queryString, (username, hashed) )
 		cursor.close()
 		_id = cursor.lastrowid
@@ -24,7 +24,7 @@ Topics (TopicName, TopicDescription)
 VALUES (%s, %s)'''
 
 	try:
-		cursor = GetDB().cursor()
+		cursor = GetDB().cursor(buffered=True)
 		cursor.execute( queryString, (name, description) )
 		cursor.close()
 		_id = cursor.lastrowid
@@ -38,7 +38,7 @@ Arguments (ArgumentTitle, ArgumentContent, TopicID, User1ID, User2ID)
 VALUES (%s, %s, %s, %s, %s)'''
 
 	try:
-		cursor = GetDB().cursor()
+		cursor = GetDB().cursor(buffered=True)
 		cursor.execute( queryString, (Title, Content, TopicID, User1ID, User2ID) )
 		_id = cursor.lastrowid
 		return _id
@@ -51,7 +51,7 @@ Arguments (ArgumentTitle, ArgumentContent, TopicID, User1ID)
 VALUES (%s, %s, %s, %s)'''
 
 	try:
-		cursor = GetDB().cursor()
+		cursor = GetDB().cursor(buffered=True)
 		cursor.execute( queryString, (Title, Content, TopicID, User1ID) )
 		_id = cursor.lastrowid
 		return _id
@@ -64,33 +64,43 @@ ON DUPLICATE KEY UPDATE
 	IsUpvote = true
 '''
 	try:
-		cursor = GetDB().cursor()
-		cursor.execute( queryString, (Title, Content, TopicID, User1ID) )
+		cursor = GetDB().cursor(buffered=True)
+		cursor.execute( queryString, (UserID, ArgumentID) )
 		return True # Don't use lastrowid here, in case of update
 	except mysql.connector.Error:
 		return False
 
 def DownvoteArgument(UserID, ArgumentID):
-	queryString = '''INSERT INTO Votes (IsUpvote, UserID, ArgumentID) VALUES (true, %s, %s)
+	queryString = '''INSERT INTO Votes (IsUpvote, UserID, ArgumentID) VALUES (false, %s, %s)
 ON DUPLICATE KEY UPDATE
-	IsUpvote = true
+	IsUpvote = false
 '''
 	try:
-		cursor = GetDB().cursor()
-		cursor.execute( queryString, (Title, Content, TopicID, User1ID) )
+		cursor = GetDB().cursor(buffered=True)
+		cursor.execute( queryString, (UserID, ArgumentID) )
 		return True # Don't use lastrowid here, in case of update
 	except mysql.connector.Error:
 		return False
 
+def RemoveVote(UserID, ArgumentID):
+	queryString = '''DELETE FROM Votes WHERE UserID=%s AND ArgumentID=%s'''
+	try:
+		cursor = GetDB().cursor(buffered=True)
+		cursor.execute( queryString, (UserID, ArgumentID) )
+		return True
+	except mysql.connector.Error:
+		return False
+
 def OpinionToArgument(user2ID, ArgumentID):
-	
 	queryString = '''UPDATE Arguments
-SET user2ID = %s
+SET User2ID = CASE
+	WHEN User2ID = NULL THEN %s
+	ELSE User2ID
 WHERE ArgumentID = %s'''
 	result = runQuery( queryString, (user2ID, ArgumentID) )
 	if len(result) == 0:
-		return None
-	return result[0]
+		return False
+	return True
 
 
 	queryString = '''INSERT INTO 
@@ -98,7 +108,7 @@ Arguments (ArgumentTitle, ArgumentContent, TopicID, User1ID, User2ID)
 VALUES (%s, %s, %s, %s)'''
 
 	try:
-		cursor = GetDB().cursor()
+		cursor = GetDB().cursor(buffered=True)
 		cursor.execute( queryString, (name, description) )
 		_id = cursor.lastrowid
 		cursor.close()
@@ -108,11 +118,11 @@ VALUES (%s, %s, %s, %s)'''
 
 def CreateMessage(MessageContent, ArgumentID, UserID):
 	queryString = '''INSERT INTO 
-Messages (MessageContent, ArgumentID, UserID) 
+Messages (MessageContent, ArgumentID, UserID)
 VALUES (%s, %s, %s)'''
 
 	try:
-		cursor = GetDB().cursor()
+		cursor = GetDB().cursor(buffered=True)
 		cursor.execute( queryString, (MessageContent, ArgumentID, UserID) )
 		_id = cursor.lastrowid
 		cursor.close()
@@ -121,7 +131,12 @@ VALUES (%s, %s, %s)'''
 		return False
 
 def GetTopArguments():
-	queryString = '''SELECT * FROM Arguments WHERE User2ID IS NOT NULL ORDER BY Created ASC LIMIT 20'''
+	queryString = '''SELECT * FROM Arguments as A
+INNER JOIN
+	(SELECT ArgumentID, SUM( CASE WHEN IsUpvote THEN 1 ELSE -1 ) as NumVotes
+	FROM Votes
+	GROUP BY ArgumentID) voteQuery ON A.ArgumentID=voteQuery.ArgumentID
+WHERE User2ID IS NOT NULL ORDER BY Created ASC LIMIT 20'''
 	result = runQuery( queryString, tuple() )
 	return result
 
@@ -131,7 +146,8 @@ def GetTopOpinions():
 	return result
 
 def GetArgument( argumentID ):
-	queryString = '''SELECT * FROM Arguments AS A
+	queryString = '''SELECT *
+FROM Arguments AS A
 INNER JOIN Topics as T
 ON A.TopicID=T.TopicID
 WHERE ArgumentID=%s'''
@@ -177,11 +193,15 @@ ORDER BY Created ASC'''
 def GetUserArguments( userID ):
 	queryString = '''SELECT * FROM Arguments AS A
 INNER JOIN Topics as T 
-ON A.TopicID=T.TopicID 
+ON A.TopicID=T.TopicID
+INNER JOIN
+	(SELECT ArgumentID, SUM(IF(IsUpvote, 1, -1)) as NumVotes
+	FROM Votes
+	GROUP BY ArgumentID) AS VQ
+ON A.ArgumentID=VQ.ArgumentID
 WHERE User1ID=%s OR User2ID=%s'''
 	result = runQuery( queryString, (userID, userID) )
 	return result
-
 
 def GetTopics():
 	queryString = '''SELECT * FROM Topics'''
@@ -242,7 +262,7 @@ def GetDB():
 
 def runQuery( queryString, params ):
 	db = GetDB()
-	cursor = db.cursor()
+	cursor = db.cursor(buffered=True)
 	cursor.execute( queryString, params )
 	result = cursor.fetchall()
 	columns = cursor.column_names
