@@ -172,8 +172,6 @@ def createOpinion():
 def send_message(post_id):
 	# Validation here would be nice, 1000000000 things could go wrong
 	argument = queries.GetArgument(post_id)
-	if session['userid'] not in (argument['User1ID'], argument['User2ID']):
-		return "false"
 	message = request.json['text']
 	return json.dumps(queries.CreateMessage(message, post_id, session['userid']))
 
