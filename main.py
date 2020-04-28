@@ -4,6 +4,7 @@ from flask import render_template, redirect, url_for, make_response
 from flask import request, session
 from bcrypt import checkpw as check_password
 from os import urandom
+import sys
 
 app = Flask(__name__)
 app.secret_key = urandom(32)
@@ -119,9 +120,10 @@ def createOpinion():
 		if  'opinionTitle' in request.form and 'opinion' in request.form:
 			title = request.form['opinionTitle']
 			content = request.form['opinion']
+			topicID = request.form['topicID']
 			user1ID = session['userid']
-			queries.CreateOpinion(title, content, request.args.get('topicID'), user1ID)
-		return redirect( url_for('index') )
+			id = queries.CreateOpinion(title, content, topicID, user1ID)
+		return redirect( url_for('/post/{}/'.format(id)) )
 		# TODO: Add form validation for required inputs
 	else:
 		return render_template('createOpinion.html')
