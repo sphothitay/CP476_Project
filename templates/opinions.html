@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="/static/main.css">
+    <title>Browse Opinions</title>
+</head>
+
+<body>
+
+{% include 'navbar.html' %}
+
+    <h1>Browse Opinions</h1>
+    <a href="/topics"><h1>Browse Topics to Submit Opinion</h1></a>
+    
+    <div id="opinionList">
+        {% for opinion in opinions %}
+            <div class="recentPost">
+                    <a href="{{ url_for('getPost', post_id=opinion.ArgumentID)}}"><h3>{{ opinion.ArgumentTitle }}</h3></a>
+                    <p>{{ opinion.ArgumentContent }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+</body>
+
+</html>

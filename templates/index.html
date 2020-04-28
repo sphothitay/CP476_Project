@@ -12,10 +12,10 @@
 
 <div id="recentDialog">
 {% if opinions %}
-{% for post in opinions %}
+{% for opinion in opinions %}
 	<div class="recentPost">
-	<a href="#"><h3>Recent Post 1 Title</h3></a>
-	<p>Some information related to the logged in user/post. These elements (class "recentPost") will be created by javascript/backend.</p>
+			<a href="{{ url_for('getPost', post_id=opinion.ArgumentID)}}"><h3>{{ opinion.ArgumentTitle }}</h3></a>
+			<p>{{ opinion.ArgumentContent }}</p>
 	</div>
 {% endfor %}
 {% else %}
@@ -57,6 +57,13 @@
 </div>
 
 {% endfor %}
+
+{% for argument in arguments %}
+	<div class="post">
+		<a href="{{ url_for('getPost', post_id=argument.ArgumentID)}}"><h3>{{ argument.ArgumentTitle }}</h3></a>
+		<p>{{ argument.ArgumentContent }}</p>	
+	</div>
+	{% endfor %}
 
 </div>
 

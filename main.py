@@ -5,6 +5,7 @@ from flask import request, session
 from bcrypt import checkpw as check_password
 from os import urandom
 import json
+import sys
 
 
 app = Flask(__name__)
@@ -17,11 +18,12 @@ def user_logged_in():
 	return request.cookies['arguserinfo'] == session['username']
 
 @app.route('/')
-@app.route('/index')
 @app.route('/home')
+@app.route('/index')
 def index():
+	print(" route", file=sys.stderr)
 	if user_logged_in():
-		arguments = queries.GetTopArguments()
+		arguments = queries.GetUserArguments(session['userid'])
 		opinions = queries.GetTopOpinions()
 		return render_template('index.html', arguments=arguments, opinions=opinions)
 	errcode = request.args.get('err')
@@ -108,6 +110,12 @@ def topics():
 	topics = queries.GetTopics()
 	return render_template('topics.html', topics=topics)
 
+@app.route('/opinions')
+def opinions():
+	opinions = queries.GetOpinions()
+	return render_template('opinions.html', opinions=opinions)
+
+
 @app.route('/createTopic', methods=["GET", "POST"])
 def createTopic():
 	if request.method == "POST":
@@ -153,6 +161,12 @@ def getRecent(post_id, message_id):
 @app.route('/post/<int:post_id>')
 def getPost(post_id):
 	argument = queries.GetArgument(post_id)
+	# TODO: edit debate template, render template with debate contents
+	return render_template('debate.html', arg=argument)
+
+@app.route('/post/<int:user_id>')
+def getUserPosts(user_id):
+	argument = queries.GetUserArguments(user_id)
 	# TODO: edit debate template, render template with debate contents
 	return render_template('debate.html', arg=argument)
 
