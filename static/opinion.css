@@ -1,0 +1,18 @@
+h1 {
+    text-align: center;
+}
+
+form {
+    text-align: center;
+}
+
+#opinionTitleInput {
+    width: 375px;
+}
+
+#opinionTextArea {
+    margin-top: 10px;
+    width: 500px;
+    height: 150px;
+    margin-bottom: 10px;
+}
