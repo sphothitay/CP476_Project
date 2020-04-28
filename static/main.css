@@ -32,6 +32,12 @@ body {
 	font-family: var(--font1);
 }
 
+.topic {
+	font-weight: bold;
+	font-size: 1.2rem;
+	color: var(--color2);
+	text-decoration: none;
+}
 
 /* Main navbar */
 #navbar ul {

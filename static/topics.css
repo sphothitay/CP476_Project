@@ -29,6 +29,8 @@ li {
     padding: 2px 16px;
     background-color: #374785;
     color: #F76C6C;
+	justify-content: center;
+	overflow: auto;
 }
 
 .card:hover {

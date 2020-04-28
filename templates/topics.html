@@ -26,7 +26,7 @@
         <ul>
             {% for topic in topics %}
             <div class="card">
-                    <li><a href="{{ url_for('createOpinion', topicID=topic.TopicID)}}">{{ topic.TopicName }}</a></li>
+                    <li><a href="{{ url_for('createOpinion', topicID=topic.TopicID)}}" class="topic">{{ topic.TopicName }}</a></li>
             </div>
             {% endfor %}
         </ul>
