@@ -156,6 +156,13 @@ WHERE ArgumentID=%s'''
 		return None
 	return result[0]
 
+def CheckSimilarTopic(argumentTitle):
+	queryString = '''SELECT COUNT(TopicName) FROM Topics WHERE TopicName=%s'''
+	result = runQuery( queryString, (argumentTitle, ) )
+	if len(result) == 0:
+		return False
+	return True
+
 def GetArgumentMessages( argumentID ):
 	queryString = '''SELECT * FROM Messages
 WHERE ArgumentID=%s
