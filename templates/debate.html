@@ -26,7 +26,7 @@
 
 <div id="recentDialog">
 	<h3>Other Arguments about</h3>
-	<h3>{{ topic }}</h3>
+	<h3>{{ arg.TopicName }}</h3>
 	{% for entry in related %}
 	<div class="recentPost">
 		<a href="{{ entry.href }}"><h3>{{ entry.title }}</h3></a>
@@ -37,21 +37,16 @@
 
 <div id="optionsDialog">
 	<h3>Topic</h3>
-	<h1 class="topic">{{ topic }}</h1>
+	<h1 class="topic">{{ arg.TopicName }}</h1>
 	<a href="#archive" class="button">End Argument</a>
 	<a href="#report" class="button">Report User</a>
 </div>
 
 <div id="mainContent">
+	<h2>{{ arg.ArgumentTitle }}</h2>
+	<div class="description"><p>{{ arg.TopicDescription }}</p></div>
 	<div id="chatWindow">
 		<div class="messages" id="messages">
-		{% for msg in messages %}
-			<div class="messagehack">
-			<div class="chatMessage {% if msg.sent %}sentchat{% else %}recvchat{% endif %}">
-				<p>{{ msg.message }}</p>
-			</div>
-			</div>
-		{% endfor %}
 		</div>
 		<div>
 			<textarea id="message" name="message" class="w80" placeholder="say something..."></textarea>

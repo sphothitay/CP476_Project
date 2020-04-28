@@ -148,7 +148,7 @@ def getRecent(message_id):
 def getPost(post_id):
 	argument = queries.GetArgument(post_id)
 	# TODO: edit debate template, render template with debate contents
-	return render_template('debate.html')
+	return render_template('debate.html', arg=argument)
 
 # TODO: finish this function, add error option for login page
 def handle_login_error(errcode):
