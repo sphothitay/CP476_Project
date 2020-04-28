@@ -1,11 +1,37 @@
 function getCookie(name){
-    var pattern = RegExp(name + "=.[^;]*")
-    var matched = document.cookie.match(pattern)
+    var pattern = RegExp(name + "=.[^;]*");
+    var matched = document.cookie.match(pattern);
     if(matched){
-        var cookie = matched[0].split('=')
-        return cookie[1]
+        var cookie = matched[0].split('=');
+        return cookie[1];
     }
-    return false
+    return false;
+}
+
+function getPostId() {
+	if(!window.location.pathname.startswith('/post/')) return null;
+	var parts = window.location.pathname.split('/');
+	if(parts.length < 3) return;
+	return id = parts[2];
+}
+
+function loadNewMessages(latestID, finishedCallback) {
+	var userid = getCookie('arguserid');
+	var id = getPostId();
+	post(
+		'/post/' + id + '/' + latestID + '/comments',
+		'',
+		function() {
+			res = JSON.parse(this.responseText);
+			other = null;
+			for(var i = 0; i < res.length; i++) {
+				sent = res[i]['UserID'] == userid || (res[i]['UserID'] != other && other != null);
+				other = res[i]['UserID'];
+				addMessage(res[i]['MessageContent'], res[i]['MessageID'], sent);
+			}
+			finishedCallback();
+		}
+	);
 }
 
 function sendMessage() {
@@ -21,17 +47,33 @@ function sendMessage() {
 	if( message.value.trim() == "" ) {
 		return;
 	}
-	
+
+	post('/posts/' + getPostId() + '/send', {'text' : message.value}, function() {;
+		addMessage(message.value, this.responseText, true);
+		message.value = "";
+	});
+}
+
+function addMessage(content, id, sent) {
 	var newMsg = document.createElement( "div" );
 	var inner = document.createElement( "div" );
 	var textP = document.createElement( "p" );
-	
+
 	textP.appendChild( document.createTextNode( message.value ) );
 	inner.appendChild( textP );
 	newMsg.appendChild( inner );
-	inner.classList.add( "chatMessage" ); // TODO: sent/recvd
+	inner.classList.add( "chatMessage" );
+	inner.classList.add( sent ? "sentchat" : "recvchat" );
 	newMsg.classList.add( "messagehack" );
-	
+	newMsg.id = id;
+
 	messages.appendChild( newMsg );
-	message.value = "";
+}
+
+function post(url, data, responseHandler) {
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader('Content-Type', 'application/json');
+	xhr.send(JSON.stringify(data));
+	xhr.onload = responseHandler;
 }
