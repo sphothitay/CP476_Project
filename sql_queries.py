@@ -106,7 +106,7 @@ WHERE ArgumentID=%s'''
 	return result[0]
 
 def GetArgumentMessages( argumentID ):
-	queryString = '''SELECT * FROM Messeges
+	queryString = '''SELECT * FROM Messages
 WHERE ArgumentID=%s
 ORDER BY Created ASC'''
 	result = runQuery( queryString, (argumentID, ) )
@@ -115,8 +115,8 @@ ORDER BY Created ASC'''
 	return result
 
 def GetRecent( argumentID, messageID ):
-	queryString = '''SELECT * FROM Messeges
-WHERE ArgumentID=%d and MessageID > %d 
+	queryString = '''SELECT * FROM Messages
+WHERE ArgumentID=%s and MessageID > %s
 ORDER BY Created ASC'''
 	result = runQuery( queryString, (argumentID, messageID, ) )
 	if len(result) == 0:
