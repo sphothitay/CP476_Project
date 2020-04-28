@@ -5,6 +5,7 @@ from flask import request, session
 from bcrypt import checkpw as check_password
 from os import urandom
 import json
+import sys
 
 
 app = Flask(__name__)
@@ -17,11 +18,13 @@ def user_logged_in():
 	return request.cookies['arguserinfo'] == session['username']
 
 @app.route('/')
-@app.route('/index')
 @app.route('/home')
+@app.route('/index')
 def index():
+	print(" route", file=sys.stderr)
 	if user_logged_in():
-		return render_template('index.html')
+		opinions = queries.GetAllOpinions()
+		return render_template('index.html', opinions=opinions)
 	errcode = request.args.get('err')
 	if errcode is not None:
 		return handle_login_error(errcode)
@@ -105,6 +108,7 @@ def debate():
 def topics():
 	topics = queries.GetTopics()
 	return render_template('topics.html', topics=topics)
+
 
 @app.route('/createTopic', methods=["GET", "POST"])
 def createTopic():
