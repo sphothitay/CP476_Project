@@ -24,7 +24,7 @@ def user_logged_in():
 @app.route('/index')
 def index():
 	if user_logged_in():
-		arguments = queries.GetUserArguments(session['userid'])
+		arguments = queries.GetTopArguments()
 		opinions = queries.GetTopOpinions()
 		return render_template('index.html', arguments=arguments, opinions=opinions)
 	errcode = request.args.get('err')
