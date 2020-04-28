@@ -50,34 +50,6 @@ CREATE TABLE Messages (
 )
 ;
 
-CREATE TABLE Comments (
-	Content text NOT NULL,
-	ParentComment int DEFAULT NULL,
-
-	CommentID int NOT NULL AUTO_INCREMENT,
-	ArgumentID int NOT NULL,
-	UserID int NOT NULL,
-	PRIMARY KEY(CommentID),
-	FOREIGN KEY(ArgumentID) REFERENCES Arguments(ArgumentID)
-		ON DELETE CASCADE,
-	FOREIGN KEY(UserID) REFERENCES Users(UserID)
-		ON DELETE CASCADE
-)
-;
-
-CREATE TABLE CommentVotes (
-	IsUpvote boolean NOT NULL, /* Comment gets +1 points if true, else -1 */
-
-	UserID int NOT NULL,
-	CommentID int NOT NULL,
-	PRIMARY KEY(UserID, CommentID),
-	FOREIGN KEY(UserID) REFERENCES Users(UserID)
-		ON DELETE CASCADE,
-	FOREIGN KEY(CommentID) REFERENCES Comments(CommentID)
-		ON DELETE CASCADE
-)
-;
-
 CREATE TABLE IF NOT EXISTS Votes (
 	IsUpvote boolean NOT NULL, /* Argument gets +1 points if true, else -1 */
 
@@ -104,7 +76,3 @@ CREATE TABLE Notifications (
 		ON DELETE CASCADE
 )
 ;
-
-/* TODO: Add some triggers
- * Comments: make sure parent comment is in same thread as child comment
-*/

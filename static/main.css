@@ -78,10 +78,16 @@ body {
 /* Recents dialog */
 #recentDialog {
 	width: 20%;
+	min-width: 20%;
 	border-color: var(--color4);
 	transition: left 0.5s ease; /* Transition for hiding the recents dialog */
 	float: left;
 	overflow-x: hidden;
+}
+
+.noposts {
+	text-align: center;
+	margin: 2rem 2rem auto;
 }
 
 .recentPost {

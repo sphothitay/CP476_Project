@@ -11,18 +11,16 @@
 {% include 'navbar.html' %}
 
 <div id="recentDialog">
+{% if opinions %}
+{% for post in opinions %}
 	<div class="recentPost">
 	<a href="#"><h3>Recent Post 1 Title</h3></a>
 	<p>Some information related to the logged in user/post. These elements (class "recentPost") will be created by javascript/backend.</p>
 	</div>
-	<div class="recentPost">
-	<a href="#"><h3>Recent Post 2 Title</h3></a>
-	<p>This post has multiple sentences of text, and would overflow if not cut off early. This demonstrates a need for a max-height property in the CSS.</p>
-	</div>
-	<div class="recentPost">
-	<a href="#"><h3>Recent Post 3 Title</h3></a>
-	<p>This post has short text; it should have some empty space.</p>
-	</div>
+{% endfor %}
+{% else %}
+	<h4 class="noposts">There are no opinion posts right now! Check back later.</h4>
+{% endif %}
 </div>
 
 <div id="optionsDialog">
@@ -48,21 +46,17 @@
 
 <div id="mainContent">
 
+{% for post in arguments %}
+
 <div class="post">
-	<h3>I am a title</h3>
-	<p>This is a snippet from the start of the post...</p>
+	<a href="/post/{{ post.ArgumentID }}"><h3>{{ post.ArgumentTitle }}</h3></a>
+	<p>{{ post.ArgumentContent }}</p>
 	<div class="postInteractBar">
 	<p>17 votes <a href="#comments">12 comments</a></p>
 	</div>
 </div>
 
-<div class="post">
-	<h3>This is another post</h3>
-	<p>Argue argue argue... bicker bicker bicker...</p>
-	<div class="postInteractBar">
-	<p>-8 votes <a href="#comments">2 comments</a></p>
-	</div>
-</div>
+{% endfor %}
 
 </div>
 

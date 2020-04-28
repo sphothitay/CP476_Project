@@ -57,6 +57,30 @@ VALUES (%s, %s, %s, %s)'''
 	except mysql.connector.Error:
 		return False
 
+def UpvoteArgument(UserID, ArgumentID):
+	queryString = '''INSERT INTO Votes (IsUpvote, UserID, ArgumentID) VALUES (true, %s, %s)
+ON DUPLICATE KEY UPDATE
+	IsUpvote = true
+'''
+	try:
+		cursor = GetDB().cursor()
+		cursor.execute( queryString, (Title, Content, TopicID, User1ID) )
+		return True # Don't use lastrowid here, in case of update
+	except mysql.connector.Error:
+		return False
+
+def DownvoteArgument(UserID, ArgumentID):
+	queryString = '''INSERT INTO Votes (IsUpvote, UserID, ArgumentID) VALUES (true, %s, %s)
+ON DUPLICATE KEY UPDATE
+	IsUpvote = true
+'''
+	try:
+		cursor = GetDB().cursor()
+		cursor.execute( queryString, (Title, Content, TopicID, User1ID) )
+		return True # Don't use lastrowid here, in case of update
+	except mysql.connector.Error:
+		return False
+
 def OpinionToArgument(user2ID, ArgumentID):
 	
 	queryString = '''UPDATE Arguments
@@ -95,8 +119,13 @@ VALUES (%s, %s, %s)'''
 	except mysql.connector.Error:
 		return False
 
-def GetTopPosts():
-	queryString = '''SELECT * FROM Arguments ORDER BY Created ASC LIMIT 20'''
+def GetTopArguments():
+	queryString = '''SELECT * FROM Arguments WHERE User2ID IS NOT NULL ORDER BY Created ASC LIMIT 20'''
+	result = runQuery( queryString, tuple() )
+	return result
+
+def GetTopOpinions():
+	queryString = '''SELECT * FROM Arguments WHERE User2ID IS NULL ORDER BY Created ASC LIMIT 20'''
 	result = runQuery( queryString, tuple() )
 	return result
 

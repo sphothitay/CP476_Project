@@ -21,7 +21,9 @@ def user_logged_in():
 @app.route('/home')
 def index():
 	if user_logged_in():
-		return render_template('index.html')
+		arguments = queries.GetTopArguments()
+		opinions = queries.GetTopOpinions()
+		return render_template('index.html', arguments=arguments, opinions=opinions)
 	errcode = request.args.get('err')
 	if errcode is not None:
 		return handle_login_error(errcode)
@@ -138,6 +140,10 @@ def send_message(post_id):
 	argument = queries.GetArgument(post_id)
 	message = request.json['text']
 	return json.dumps(queries.CreateMessage(message, post_id, session['userid']))
+
+@app.route('/post/<int:post_id>/upvote', methods=['POST'])
+def upvote(post_id):
+	queries.
 
 @app.route('/post/<int:post_id>/<int:message_id>/getRecent', methods=['POST'])
 def getRecent(post_id, message_id):
