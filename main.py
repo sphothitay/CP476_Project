@@ -1,4 +1,5 @@
 import sql_queries as queries
+from helpers import isUsernameGood, isPasswordGood
 from flask import Flask
 from flask import render_template, redirect, url_for, make_response
 from flask import request, session
@@ -6,7 +7,6 @@ from bcrypt import checkpw as check_password
 from os import urandom
 import json
 import requests
-
 
 app = Flask(__name__)
 app.secret_key = urandom(32)
@@ -84,11 +84,17 @@ def register():
 	if user is not None:
 		return redirect(url_for('index', err='already_exists'))
 
+	if not isUsernameGood( username ):
+		return redirect(url_for('index', err='bad_username'))
+
 	password = request.form['pass']
 	password_repeat = request.form['passrep']
 
 	if password != password_repeat:
 		return redirect(url_for('index', err='password_match'))
+
+	if not isPasswordGood( password ):
+		return redirect(url_for('index', err='bad_password'))
 
 	_id = queries.CreateUser(username, password)
 	if _id:
@@ -218,6 +224,10 @@ def handle_login_error(errcode):
 		errmsg = 'Incorrect username or password'
 	if errcode == 'missing_fields':
 		errmsg = 'All fields must be filled to continue'
+	if errcode == 'bad_password':
+		errmsg = 'Password must be >= 8 characters and contain lowercase, uppercase, and numbers'
+	if errcode == 'bad_username':
+		errmsg = 'Username should be alphnumeric and between 4 and 16 characters'
 	return render_template('login.html', error=errmsg)
 
 def handle_topic_error(errcode):

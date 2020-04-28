@@ -12,3 +12,6 @@ def isPasswordGood( password ):
 		or pass_set.isdisjoint(upper)
 		or pass_set.isdisjoint(number) )
 
+def isUsernameGood( username ):
+	allowed = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+	return len(username) <= 16 and len(username) >= 4 and all( x in allowed for x in username )
