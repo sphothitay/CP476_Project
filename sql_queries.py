@@ -32,7 +32,7 @@ VALUES (%s, %s)'''
 def CreateArgument(Title, Content, TopicID, User1ID, User2ID):
 	queryString = '''INSERT INTO 
 Arguments (ArgumentTitle, ArgumentContent, TopicID, User1ID, User2ID) 
-VALUES (%s, %s, %d, %d, %d)'''
+VALUES (%s, %s, %s, %s, %s)'''
 
 	try:
 		cursor = GetDB().cursor()
@@ -43,8 +43,8 @@ VALUES (%s, %s, %d, %d, %d)'''
 
 def CreateOpinion(Title, Content, TopicID, User1ID):
 	queryString = '''INSERT INTO 
-Arguments (ArgumentTitle, ArgumentContent, TopicID, User1ID, User2ID) 
-VALUES (%s, %s, %d, %d)'''
+Arguments (ArgumentTitle, ArgumentContent, TopicID, User1ID) 
+VALUES (%s, %s, %s, %s)'''
 
 	try:
 		cursor = GetDB().cursor()
@@ -57,8 +57,8 @@ VALUES (%s, %s, %d, %d)'''
 def OpinionToArgument(user2ID, ArgumentID):
 	
 	queryString = '''UPDATE Arguments
-SET user2ID = %d
-WHERE ArgumentID = %d'''
+SET user2ID = %s
+WHERE ArgumentID = %s'''
 	result = runQuery( queryString, (user2ID, ArgumentID) )
 	if len(result) == 0:
 		return None
@@ -67,7 +67,7 @@ WHERE ArgumentID = %d'''
 
 	queryString = '''INSERT INTO 
 Arguments (ArgumentTitle, ArgumentContent, TopicID, User1ID, User2ID) 
-VALUES (%s, %s, %d, %d)'''
+VALUES (%s, %s, %s, %s)'''
 
 	try:
 		cursor = GetDB().cursor()
@@ -80,7 +80,7 @@ VALUES (%s, %s, %d, %d)'''
 def CreateMessage(MessageContent, ArgumentID, UserID):
 	queryString = '''INSERT INTO 
 Topics (MessageContent, ArgumentID, UserID) 
-VALUES (%s, %d, %d)'''
+VALUES (%s, %s, %s)'''
 
 	try:
 		cursor = GetDB().cursor()
