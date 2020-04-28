@@ -5,7 +5,6 @@ from flask import request, session
 from bcrypt import checkpw as check_password
 from os import urandom
 import json
-import sys
 import requests
 
 
@@ -126,10 +125,8 @@ def createTopic():
 			description = request.form['description']
 			parameter = {"ml":"Penguin"}
 			r = requests.get('https://api.datamuse.com/words', parameter)
-			print(r.status_code, file=sys.stderr)
 			if r.status_code == 200:
 				syn_json = r.json()
-				print(syn_json, file=sys.stderr)
 				similarExists = False
 				for i in syn_json.json()[0:3]:
 					if queries.CheckSimilarTopic(i['word']):

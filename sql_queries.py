@@ -80,20 +80,12 @@ VALUES (%s, %s, %s)'''
 	return doInsert( queryString, (MessageContent, ArgumentID, UserID) )
 
 def GetTopArguments():
-	queryString = '''SELECT * FROM Arguments as A
-INNER JOIN
-	(SELECT ArgumentID, SUM(IF(IsUpvote,1,-1)) as NumVotes
-	FROM Votes
-	GROUP BY ArgumentID) voteQuery
-ON A.ArgumentID=voteQuery.ArgumentID
-WHERE User2ID IS NOT NULL ORDER BY Created ASC LIMIT 20'''
+	queryString = '''SELECT * FROM Arguments as A ORDER BY Created ASC LIMIT 20'''
 	result = runQuery( queryString, tuple() )
 	return result
 
 def GetTopOpinions():
-	queryString = '''SELECT * FROM 
-	Arguments AS A
-	
+	queryString = '''SELECT * FROM Arguments AS A
 	WHERE User2ID IS NULL ORDER BY Created ASC LIMIT 20'''
 	result = runQuery( queryString, tuple() )
 	return result
