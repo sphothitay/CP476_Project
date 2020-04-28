@@ -4,6 +4,7 @@ from flask import render_template, redirect, url_for, make_response
 from flask import request, session
 from bcrypt import checkpw as check_password
 from os import urandom
+import json
 
 app = Flask(__name__)
 app.secret_key = urandom(32)
@@ -29,6 +30,7 @@ def index():
 def logout():
 	res = make_response(redirect(url_for('index')))
 	res.set_cookie('arguserinfo', '', max_age=0)
+	res.set_cookie('arguserid', '', max_age=0)
 	if 'username' in session:
 		del session['username']
 		del session['userid']
@@ -50,6 +52,7 @@ def login():
 		session['userid'] = user['UserID']
 		res = make_response(redirect(request.referrer or url_for('')))
 		res.set_cookie("arguserinfo", session['username'], max_age=60*60*24*7)
+		res.set_cookie("arguserid", session['userid'], max_age=60*60*24*7)
 		return res
 	
 	return redirect(url_for('index', err='invalid_login'))
@@ -71,12 +74,13 @@ def register():
 	if password != password_repeat:
 		return redirect(url_for('index', err='password_match'))
 
-	if queries.CreateUser(username, password):
-		user = queries.GetUserByUsername(username)
-		session['username'] = user['Username']
-		session['userid'] = user['UserID']
+	_id = queries.CreateUser(username, password)
+	if _id:
+		session['username'] = username
+		session['userid'] = _id
 		res = make_response(redirect(url_for('index')))
 		res.set_cookie('arguserinfo', username, max_age=60*60*24*7)
+		res.set_cookie('arguserid', username, max_age=60*60*24*7)
 		return res
 	return redirect(url_for('index', err='create_failed'))
 
@@ -118,14 +122,15 @@ def opinion():
 
 @app.route('/post/<int:post_id>/send', methods=['POST'])
 def send_message(post_id):
+	# Validation here would be nice, 1000000000 things could go wrong
 	argument = queries.GetArgument(post_id)
-	res = make_response('')
-	return res
+	message = json.loads(request.json)['text']
+	return queries.CreateMessage(message, post_id, session['userid'])
 
 @app.route('/post/<int:post_id>/<int:message_id>/getRecent', methods=['POST'])
 def getRecent(message_id):
 	result = queries.GetRecent(post_id, message_id)
-	return result
+	return json.dumps(result)
 
 @app.route('/post/<int:post_id>')
 def getPost(post_id):

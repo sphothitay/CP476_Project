@@ -12,7 +12,8 @@ VALUES (%s, %s)'''
 		cursor = GetDB().cursor()
 		cursor.execute( queryString, (username, hashed) )
 		cursor.close()
-		return True
+		_id = cursor.lastrowid
+		return _id
 	except mysql.connector.Error:
 		return False
 
@@ -25,7 +26,8 @@ VALUES (%s, %s)'''
 		cursor = GetDB().cursor()
 		cursor.execute( queryString, (name, description) )
 		cursor.close()
-		return True
+		_id = cursor.lastrowid
+		return _id
 	except mysql.connector.Error:
 		return False
 
@@ -37,7 +39,8 @@ VALUES (%s, %s, %d, %d, %d)'''
 	try:
 		cursor = GetDB().cursor()
 		cursor.execute( queryString, (Title, Content, TopicID, User1ID, User2ID) )
-		return True
+		_id = cursor.lastrowid
+		return _id
 	except mysql.connector.Error:
 		return False
 
@@ -72,8 +75,9 @@ VALUES (%s, %s, %d, %d)'''
 	try:
 		cursor = GetDB().cursor()
 		cursor.execute( queryString, (name, description) )
+		_id = cursor.lastrowid
 		cursor.close()
-		return True
+		return _id
 	except mysql.connector.Error:
 		return False
 
@@ -85,8 +89,9 @@ VALUES (%s, %d, %d)'''
 	try:
 		cursor = GetDB().cursor()
 		cursor.execute( queryString, (name, description) )
+		_id = cursor.lastrowid
 		cursor.close()
-		return True
+		return _id
 	except mysql.connector.Error:
 		return False
 
