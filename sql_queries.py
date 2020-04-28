@@ -95,6 +95,11 @@ VALUES (%s, %s, %s)'''
 	except mysql.connector.Error:
 		return False
 
+def GetTopPosts():
+	queryString = '''SELECT * FROM Arguments ORDER BY Created ASC LIMIT 20'''
+	result = runQuery( queryString, tuple() )
+	return result
+
 def GetArgument( argumentID ):
 	queryString = '''SELECT * FROM Arguments AS A
 INNER JOIN Topics as T
