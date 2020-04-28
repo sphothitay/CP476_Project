@@ -53,7 +53,7 @@ def login():
 		session['userid'] = user['UserID']
 		res = make_response(redirect(request.referrer or url_for('index')))
 		res.set_cookie("arguserinfo", session['username'], max_age=60*60*24*7)
-		res.set_cookie("arguserid", session['userid'], max_age=60*60*24*7)
+		res.set_cookie("arguserid", str(session['userid']), max_age=60*60*24*7)
 		return res
 	
 	return redirect(url_for('index', err='invalid_login'))
@@ -81,7 +81,7 @@ def register():
 		session['userid'] = _id
 		res = make_response(redirect(url_for('index')))
 		res.set_cookie('arguserinfo', username, max_age=60*60*24*7)
-		res.set_cookie('arguserid', username, max_age=60*60*24*7)
+		res.set_cookie('arguserid', str(_id), max_age=60*60*24*7)
 		return res
 	return redirect(url_for('index', err='create_failed'))
 

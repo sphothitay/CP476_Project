@@ -12,6 +12,7 @@ service mysql restart
 
 echo "Creating SQL tables"
 mysql -u root --password="${MYSQL_PASSWORD}" < ./sql/build_database.sql
+mysql -u root --password="${MYSQL_PASSWORD}" < ./sql/load_test_data.sql
 
 echo "Starting flask app"
 export FLASK_APP=main.py
