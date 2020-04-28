@@ -49,6 +49,10 @@ function sendMessage() {
 	}
 
 	post('/post/' + getPostId() + '/send', {'text' : message.value}, function() {;
+		if(this.responseText == "false") {
+			alert("Oops! You can't do that.");
+			return;
+		}
 		addMessage(message.value, this.responseText, true);
 		message.value = "";
 	});
