@@ -5,6 +5,12 @@
     <link rel="stylesheet" href="/static/main.css">
     <link rel="stylesheet" href="/static/topics.css">
     <title>Browse Topics</title>
+    <script type="text/javascript">
+        function hideElement( id ) {
+            elem = document.getElementById( id );
+            if( elem ) elem.style.display = "none";
+        }
+    </script>
 </head>
 
 <body>
@@ -14,9 +20,9 @@
     <h1>Browse Topics</h1>
 
     <div id="topicSearch">
-		<form name="topicSearchForm" action="topics" method="GET">
-		<input class="w40" type="text" name="search" placeholder="Search...">
-		<button class="w10" type="submit">Go</button>
+		<form name="topicSearchForm" action="topics" method="POST">
+            <input class="w40" type="text" name="search" placeholder="Search...">
+            <button class="w10" type="submit">Go</button>
 		</form>
 	</div>
 
@@ -32,6 +38,12 @@
         </ul>
     </div>
 
+    {% if error is defined %}
+        <div class="errorbox" id="topicerror">
+            <p>{{ error }}</p>
+            <a class="close" href="javascript:void(0)" onclick="hideElement('topicerror')">x</a>
+        </div>
+    {% endif %}
 </body>
 
 </html>

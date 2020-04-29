@@ -158,6 +158,13 @@ def GetTopics():
 	queryString = '''SELECT * FROM Topics'''
 	return runQuery( queryString, tuple() )
 
+def SearchTopics( topicName ):
+	queryString = '''SELECT * FROM Topics WHERE TopicName LIKE %s'''
+	result = runQuery( queryString, (topicName, ) ) 
+	if len(result) == 0:
+		return None
+	return result
+
 def GetComment( commentID ):
 	queryString = '''SELECT * FROM Comments WHERE CommentID=%s'''
 	result = runQuery( queryString, (commentID, ) )

@@ -107,11 +107,19 @@ def register():
 	return redirect(url_for('index', err='create_failed'))
 
 # TODO: Use TopicDescription & TopicID in topics.html template
-@app.route('/topics')
+@app.route('/topics', methods=["GET", "POST"])
 def topics():
 	if not user_logged_in():
 		return redirect(url_for('index'))
-	topics = queries.GetTopics()
+	if 'search' in request.form:
+		topics = queries.SearchTopics(request.form['search'])
+		if topics is None:
+			topics = queries.GetTopics()
+			return render_template('topics.html', topics=topics, error="There were no results found from your search")
+		else:
+			return render_template('topics.html', topics=topics)
+	else:
+		topics = queries.GetTopics()
 	return render_template('topics.html', topics=topics)
 
 @app.route('/opinions')
